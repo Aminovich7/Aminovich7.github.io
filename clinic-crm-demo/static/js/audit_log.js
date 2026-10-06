@@ -1,0 +1,185 @@
+// Audit jurnali — the one place voided records are seen and acted on.
+// The ordinary record pages list live records only, so Tiklash (restore) and
+// O'chirish (permanent delete) exist here and nowhere else.
+(async function () {
+  const user = await initPage({ allowedRoles: ["superadmin"] });
+  if (!user) return;
+
+  const errorContainer = document.getElementById("error-container");
+  const successContainer = document.getElementById("success-container");
+  const tbody = document.getElementById("voided-tbody");
+  const pagination = document.getElementById("voided-pagination");
+  const typeSelect = document.getElementById("voided_resource_type");
+
+  let page = 1;
+  const pageSize = 20;
+  // What the table is currently showing, so "Barchasini o'chirish" deletes
+  // exactly that — not whatever the Turi select was changed to afterwards
+  // without pressing Filtrlash.
+  let shownType = "";
+  let shownTotal = 0;
+  const deleteAllBtn = document.getElementById("delete-all-btn");
+
+  function clearMessages() {
+    errorContainer.innerHTML = "";
+    successContainer.innerHTML = "";
+  }
+
+  function showSuccess(message) {
+    successContainer.innerHTML = "";
+    const box = document.createElement("div");
+    box.className = "success-box";
+    box.textContent = message;
+    successContainer.appendChild(box);
+  }
+
+  // Where restore/delete live for each voidable resource.
+  const RESOURCE_ENDPOINTS = {
+    consultation: "/consultations",
+    surgery: "/surgeries",
+    room: "/rooms",
+    duty_entry: "/duty-entries",
+    expense: "/expenses",
+    pharmacy_entry: "/pharmacy/entries",
+    salary_payment: "/salary/payments",
+  };
+
+  const RESOURCE_LABELS = {
+    consultation: "Consultation",
+    surgery: "Surgery",
+    room: "Room",
+    duty_entry: "Duty shifts",
+    expense: "Expense",
+    pharmacy_entry: "Pharmacy",
+    salary_payment: "Salary payment",
+  };
+
+  typeSelect.innerHTML = '<option value="">— all —</option>';
+  Object.keys(RESOURCE_ENDPOINTS).forEach((type) => {
+    const opt = document.createElement("option");
+    opt.value = type;
+    opt.textContent = RESOURCE_LABELS[type];
+    typeSelect.appendChild(opt);
+  });
+
+  async function restoreRecord(resourceType, id) {
+    if (!confirm(RESTORE_CONFIRM)) return;
+    clearMessages();
+    try {
+      await apiFetch(`${RESOURCE_ENDPOINTS[resourceType]}/${id}/restore`, { method: "POST" });
+      await loadVoided();
+      showSuccess("Record restored");
+    } catch (err) {
+      showError(errorContainer, err.detail || err.message || "Could not restore the record");
+    }
+  }
+
+  async function deleteRecord(resourceType, id) {
+    if (!confirm(DELETE_CONFIRM)) return;
+    clearMessages();
+    try {
+      await apiFetch(`${RESOURCE_ENDPOINTS[resourceType]}/${id}`, { method: "DELETE" });
+      await loadVoided();
+      showSuccess("Record permanently deleted");
+    } catch (err) {
+      showError(errorContainer, err.detail || err.message || "Could not delete the record");
+    }
+  }
+
+  async function deleteAllRecords() {
+    const scope = shownType
+      ? `all voided "${RESOURCE_LABELS[shownType]}" records`
+      : "all voided records";
+    const message =
+      `Permanently delete ${scope} in the list (${shownTotal})?
+
+` +
+      "This CANNOT BE UNDONE. The records are removed from the database " +
+      "and their data is not kept anywhere.";
+    if (!confirm(message)) return;
+
+    clearMessages();
+    const params = new URLSearchParams();
+    if (shownType) params.set("resource_type", shownType);
+    try {
+      const result = await apiFetch(`/voided-records?${params.toString()}`, { method: "DELETE" });
+      page = 1;
+      await loadVoided();
+      showSuccess(`${result.deleted} records permanently deleted`);
+    } catch (err) {
+      showError(errorContainer, err.detail || err.message || "Could not delete the records");
+    }
+  }
+
+  deleteAllBtn.addEventListener("click", deleteAllRecords);
+
+  async function loadVoided() {
+    tbody.innerHTML = "";
+    pagination.innerHTML = "";
+    deleteAllBtn.disabled = true;
+
+    const params = new URLSearchParams({ page, page_size: pageSize });
+    if (typeSelect.value) params.set("resource_type", typeSelect.value);
+
+    try {
+      const data = await withLoading(tbody.closest("table"), () =>
+        apiFetch(`/voided-records?${params.toString()}`)
+      );
+      shownType = typeSelect.value;
+      shownTotal = data.total;
+      deleteAllBtn.disabled = data.total === 0;
+
+      if (data.items.length === 0) {
+        renderEmpty(
+          tbody,
+          columnCount(tbody.closest("table")),
+          "No voided records"
+        );
+      }
+
+      data.items.forEach((record) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(record.resource_label)}</td>
+          <td>${escapeHtml(record.summary)}</td>
+          <td>${formatDate(record.date)}</td>
+          <td class="num">${record.amount != null ? formatMoney(record.amount) : "—"}</td>
+          <td>${formatDateTime(record.voided_at)}</td>
+          <td>${record.voided_by_name ? escapeHtml(record.voided_by_name) : '<span class="muted">—</span>'}</td>
+          <td class="actions-cell">
+            <button class="secondary restore-btn" data-type="${record.resource_type}" data-id="${record.id}">Restore</button>
+            <button class="danger delete-btn" data-type="${record.resource_type}" data-id="${record.id}">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll(".restore-btn").forEach((btn) => {
+        btn.addEventListener("click", () => restoreRecord(btn.dataset.type, btn.dataset.id));
+      });
+      tbody.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.addEventListener("click", () => deleteRecord(btn.dataset.type, btn.dataset.id));
+      });
+
+      pagination.innerHTML = `
+        <button class="secondary" id="prev-page" ${page <= 1 ? "disabled" : ""}>Previous</button>
+        <span>${paginationLabel(data)}</span>
+        <button class="secondary" id="next-page" ${page >= data.pages ? "disabled" : ""}>Next</button>
+      `;
+      const prevBtn = document.getElementById("prev-page");
+      const nextBtn = document.getElementById("next-page");
+      if (prevBtn) prevBtn.addEventListener("click", () => { page -= 1; loadVoided(); });
+      if (nextBtn) nextBtn.addEventListener("click", () => { page += 1; loadVoided(); });
+    } catch (err) {
+      showError(errorContainer, err.detail || err.message || "Could not load the voided records");
+    }
+  }
+
+  document.getElementById("voided-filter-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    page = 1;
+    loadVoided();
+  });
+
+  loadVoided();
+})();

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-demo-lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pharmacy — Clinic CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Clinic CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Main menu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Log out</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Pharmacy</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<div class="card">
+  <form class="inline-form" id="filter-form">
+    <div class="field">
+      <label for="date_from">From</label>
+      <input type="date" id="date_from">
+    </div>
+    <div class="field">
+      <label for="date_to">To</label>
+      <input type="date" id="date_to">
+    </div>
+    <button type="submit">Search</button>
+    <button type="button" class="secondary" id="current-month-btn">This month</button>
+    <button type="button" class="secondary" id="previous-month-btn">Last month</button>
+    <button type="button" class="secondary" id="last-week-btn">Last week</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Clear</button>
+  </form>
+  <p class="muted" id="period-label"></p>
+</div>
+
+<div class="grid" id="balance-cards"></div>
+
+<div class="card entry-card">
+  <h2>Add an entry</h2>
+  <form class="inline-form" id="entry-form">
+    <div class="field">
+      <label for="date">Date</label>
+      <input type="date" id="date">
+    </div>
+    <div class="field">
+      <label for="medicine_cost">Medicine received (so'm)</label>
+      <input type="text" inputmode="numeric" id="medicine_cost">
+    </div>
+    <div class="field">
+      <label for="amount_paid">Paid (so'm)</label>
+      <input type="text" inputmode="numeric" id="amount_paid">
+    </div>
+    <div class="field">
+      <label for="comment">Note (optional)</label>
+      <input type="text" id="comment" maxlength="500">
+    </div>
+    <button type="submit">Save</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th class="num">Medicine received</th>
+        <th class="num">Paid</th>
+        <th>Note</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="entries-tbody"></tbody>
+  </table>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/dorixona.js?v=1"></script>
+
+</body>
+</html>

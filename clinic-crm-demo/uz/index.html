@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="uz" data-demo-lang="uz">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kirish — Klinika CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body>
+  <div class="center-page">
+    <div class="login-card">
+      <h1>Klinika CRM</h1>
+      <div id="error-container"></div>
+      <form id="login-form">
+        <div class="field">
+          <label for="username">Foydalanuvchi nomi</label>
+          <input id="username" name="username" type="text" required autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="password">Parol</label>
+          <input id="password" name="password" type="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" id="login-btn">Kirish</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/login.js?v=1"></script>
+</body>
+</html>

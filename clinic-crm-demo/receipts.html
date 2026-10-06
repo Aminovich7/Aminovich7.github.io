@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en" data-demo-lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receipts — Clinic CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Clinic CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Main menu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Log out</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Receipts</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<div class="tabs">
+  <button type="button" class="tab-btn active" data-tab="consultation">Consultation</button>
+  <button type="button" class="tab-btn" data-tab="surgery">Surgery</button>
+  <button type="button" class="tab-btn" data-tab="room">Room</button>
+</div>
+
+<!-- Consultation form -->
+<div class="card entry-card tab-panel" id="panel-consultation">
+  <h2 id="c_form_title">New consultation</h2>
+  <form class="inline-form" id="consultation-form">
+    <input type="hidden" id="c_id">
+    <div class="field">
+      <label for="c_type">Type</label>
+      <select id="c_type" required>
+        <option value="korik">Consultation</option>
+        <option value="qaytakorik">Follow-up</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="c_receipt_number">Receipt no.</label>
+      <input type="number" id="c_receipt_number" min="1" required>
+    </div>
+    <div class="field">
+      <label for="c_date">Date</label>
+      <input type="datetime-local" id="c_date">
+    </div>
+    <div class="field">
+      <label for="c_doctor">Doctor</label>
+      <select id="c_doctor"></select>
+    </div>
+    <div class="field">
+      <label for="c_amount">Amount</label>
+      <input type="text" inputmode="numeric" id="c_amount" required>
+    </div>
+    <div class="field">
+      <label for="c_doctor_percent">Doctor %</label>
+      <input type="number" id="c_doctor_percent" min="0" max="100" step="0.01" required>
+    </div>
+    <div class="field">
+      <label for="c_minus_beshming">Per-visit deduction</label>
+      <input type="text" inputmode="numeric" id="c_minus_beshming" placeholder="default">
+    </div>
+    <button type="submit" id="c_submit_btn">Add</button>
+    <button type="button" class="secondary hidden" id="c_cancel_btn">Cancel editing</button>
+  </form>
+  <div class="muted" id="c_preview"></div>
+</div>
+
+<!-- Surgery form -->
+<div class="card entry-card tab-panel hidden" id="panel-surgery">
+  <h2 id="s_form_title">New surgery</h2>
+  <form class="inline-form" id="surgery-form">
+    <input type="hidden" id="s_id">
+    <div class="field">
+      <label for="s_receipt_number">Receipt no.</label>
+      <input type="number" id="s_receipt_number" min="1" required>
+    </div>
+    <div class="field">
+      <label for="s_date">Date</label>
+      <input type="datetime-local" id="s_date">
+    </div>
+    <div class="field">
+      <label for="s_doctor">Doctor</label>
+      <select id="s_doctor"></select>
+    </div>
+    <div class="field">
+      <label for="s_amount">Amount</label>
+      <input type="text" inputmode="numeric" id="s_amount" required>
+    </div>
+    <div class="field">
+      <label for="s_surgery_expense">Expense</label>
+      <input type="text" inputmode="numeric" id="s_surgery_expense" required>
+    </div>
+    <div class="field">
+      <label for="s_doctor_percent">Doctor %</label>
+      <input type="number" id="s_doctor_percent" min="0" max="100" step="0.01" required>
+    </div>
+    <button type="submit" id="s_submit_btn">Add</button>
+    <button type="button" class="secondary hidden" id="s_cancel_btn">Cancel editing</button>
+  </form>
+  <div class="muted" id="s_preview"></div>
+</div>
+
+<!-- Room form -->
+<div class="card entry-card tab-panel hidden" id="panel-room">
+  <h2 id="r_form_title">New room stay</h2>
+  <form class="inline-form" id="room-form">
+    <input type="hidden" id="r_id">
+    <div class="field">
+      <label for="r_receipt_number">Receipt no.</label>
+      <input type="number" id="r_receipt_number" min="1">
+    </div>
+    <div class="field">
+      <label for="r_date">Date</label>
+      <input type="datetime-local" id="r_date">
+    </div>
+    <div class="field">
+      <label for="r_doctor">Doctor</label>
+      <select id="r_doctor"></select>
+    </div>
+    <div class="field">
+      <label for="r_amount">Amount</label>
+      <input type="text" inputmode="numeric" id="r_amount" required>
+    </div>
+    <div class="field">
+      <label for="r_doctor_percent">Doctor %</label>
+      <input type="number" id="r_doctor_percent" min="0" max="100" step="0.01" required>
+    </div>
+    <button type="submit" id="r_submit_btn">Add</button>
+    <button type="button" class="secondary hidden" id="r_cancel_btn">Cancel editing</button>
+  </form>
+  <div class="muted" id="r_preview"></div>
+</div>
+
+<h2>Recent records</h2>
+<div class="card">
+  <form class="inline-form" id="filter-form">
+    <div class="field">
+      <label for="filter_date_from">From</label>
+      <input type="date" id="filter_date_from">
+    </div>
+    <div class="field">
+      <label for="filter_date_to">To</label>
+      <input type="date" id="filter_date_to">
+    </div>
+    <div class="field">
+      <label for="filter_doctor">Doctor</label>
+      <select id="filter_doctor"></select>
+    </div>
+    <div class="field hidden" id="filter-creator-field">
+      <label for="filter_creator">Entered by</label>
+      <select id="filter_creator"></select>
+    </div>
+    <button type="submit">Filter</button>
+    <button type="button" class="secondary" id="current-month-btn">This month</button>
+    <button type="button" class="secondary" id="previous-month-btn">Last month</button>
+    <button type="button" class="secondary" id="last-week-btn">Last week</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Clear</button>
+  </form>
+  <p class="muted" id="period-label"></p>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead id="recent-thead"></thead>
+    <tbody id="recent-tbody"></tbody>
+  </table>
+</div>
+<div class="pagination" id="pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/receipts.js?v=1"></script>
+
+</body>
+</html>

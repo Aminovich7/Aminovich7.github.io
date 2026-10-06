@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en" data-demo-lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Users — Clinic CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Clinic CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Main menu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Log out</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Users</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<!-- Managers — superadmin only -->
+<div id="managers-section" class="hidden">
+  <h2>Managers</h2>
+
+  <div class="card entry-card hidden" id="manager-form-card">
+    <h2 id="manager-form-title">Add a manager</h2>
+    <form class="inline-form" id="manager-form">
+      <input type="hidden" id="manager-id">
+      <div class="field">
+        <label for="manager-username">Username</label>
+        <input type="text" id="manager-username" minlength="3" maxlength="64" required>
+      </div>
+      <div class="field">
+        <label for="manager-full-name">Full name</label>
+        <input type="text" id="manager-full-name" minlength="3" maxlength="64" required>
+      </div>
+      <div class="field">
+        <label for="manager-password">Password</label>
+        <input type="password" id="manager-password" minlength="8" required>
+      </div>
+      <button type="submit">Save</button>
+      <button type="button" class="secondary" id="manager-cancel-btn">Cancel</button>
+    </form>
+    <p class="muted" id="manager-password-note"></p>
+  </div>
+
+  <button id="manager-add-btn">+ Add a manager</button>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Full name</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="managers-tbody"></tbody>
+    </table>
+  </div>
+  <div class="pagination" id="managers-pagination"></div>
+</div>
+
+<!-- Assistants — superadmin + manager -->
+<div id="assistants-section" class="hidden">
+  <h2>Assistants</h2>
+
+  <div class="card entry-card hidden" id="assistant-form-card">
+    <h2 id="assistant-form-title">Add an assistant</h2>
+    <form class="inline-form" id="assistant-form">
+      <input type="hidden" id="assistant-id">
+      <div class="field">
+        <label for="assistant-username">Username</label>
+        <input type="text" id="assistant-username" minlength="3" maxlength="64" required>
+      </div>
+      <div class="field">
+        <label for="assistant-full-name">Full name</label>
+        <input type="text" id="assistant-full-name" minlength="3" maxlength="64" required>
+      </div>
+      <div class="field">
+        <label for="assistant-password">Password</label>
+        <input type="password" id="assistant-password" minlength="8" required>
+      </div>
+      <button type="submit">Save</button>
+      <button type="button" class="secondary" id="assistant-cancel-btn">Cancel</button>
+    </form>
+    <p class="muted" id="assistant-password-note"></p>
+  </div>
+
+  <button id="assistant-add-btn">+ Add an assistant</button>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Full name</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="assistants-tbody"></tbody>
+    </table>
+  </div>
+  <div class="pagination" id="assistants-pagination"></div>
+</div>
+
+<!-- My account — superadmin (username/password) or manager (username/full name/password) -->
+<div id="account-section" class="hidden">
+  <h2>My account</h2>
+  <div class="card entry-card">
+    <form class="inline-form" id="account-form">
+      <div class="field">
+        <label for="account-username">Username</label>
+        <input type="text" id="account-username">
+      </div>
+      <div class="field hidden" id="account-full-name-field">
+        <label for="account-full-name">Full name</label>
+        <input type="text" id="account-full-name" minlength="3" maxlength="64">
+      </div>
+      <div class="field">
+        <label for="account-password">Password</label>
+        <input type="password" id="account-password" minlength="8">
+      </div>
+      <button type="submit">Update my details</button>
+    </form>
+    <p class="muted" id="account-note"></p>
+  </div>
+</div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/users.js?v=1"></script>
+
+</body>
+</html>

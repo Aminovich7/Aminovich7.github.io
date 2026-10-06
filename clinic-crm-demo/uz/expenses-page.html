@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="uz" data-demo-lang="uz">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boshqa harajatlar — Klinika CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Klinika CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Asosiy menyu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Chiqish</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Boshqa harajatlar</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<div class="card">
+  <form class="inline-form" id="filter-form">
+    <div class="field">
+      <label for="search">Sarlavha bo'yicha qidirish</label>
+      <input type="text" id="search">
+    </div>
+    <div class="field">
+      <label for="date_from">Dan</label>
+      <input type="date" id="date_from">
+    </div>
+    <div class="field">
+      <label for="date_to">Gacha</label>
+      <input type="date" id="date_to">
+    </div>
+    <button type="submit">Qidirish</button>
+    <button type="button" class="secondary" id="current-month-btn">Joriy oy</button>
+    <button type="button" class="secondary" id="previous-month-btn">O'tgan oy</button>
+    <button type="button" class="secondary" id="last-week-btn">O'tgan hafta</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Tozalash</button>
+  </form>
+  <p class="muted" id="period-label"></p>
+</div>
+
+<div class="grid" id="summary-cards"></div>
+
+<div class="card entry-card">
+  <h2>Xarajat qo'shish</h2>
+  <form class="inline-form" id="expense-form">
+    <div class="field">
+      <label for="title">Sarlavha</label>
+      <input type="text" id="title" required>
+    </div>
+    <div class="field">
+      <label for="amount">Summa (so'm)</label>
+      <input type="text" inputmode="numeric" id="amount" required>
+    </div>
+    <div class="field">
+      <label for="date">Sana</label>
+      <input type="date" id="date">
+    </div>
+    <button type="submit">Saqlash</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Sana</th>
+        <th>Sarlavha</th>
+        <th class="num">Summa</th>
+        <th>Amallar</th>
+      </tr>
+    </thead>
+    <tbody id="expenses-tbody"></tbody>
+  </table>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/harajatlar.js?v=1"></script>
+
+</body>
+</html>

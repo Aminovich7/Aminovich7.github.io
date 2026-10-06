@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-demo-lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voided records — Clinic CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Clinic CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Main menu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Log out</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Voided records</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<p class="muted">
+  Every voided record is listed here. "Restore" brings a record back and it counts in the reports again. "Delete" removes it permanently — this cannot be undone and the record is not kept anywhere. "Delete all" permanently removes every record in the list (for the selected type) at once.
+</p>
+
+<div class="card">
+  <form class="inline-form" id="voided-filter-form">
+    <div class="field">
+      <label for="voided_resource_type">Type</label>
+      <select id="voided_resource_type"></select>
+    </div>
+    <button type="submit">Filter</button>
+    <button type="button" class="danger" id="delete-all-btn" disabled>Delete all</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th class="num">Amount</th>
+        <th>Voided at</th>
+        <th>Voided by</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="voided-tbody"></tbody>
+  </table>
+</div>
+<div class="pagination" id="voided-pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/audit_log.js?v=1"></script>
+
+</body>
+</html>

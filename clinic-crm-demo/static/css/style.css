@@ -1,0 +1,842 @@
+/* ==========================================================================
+   Inter — self-hosted (SIL Open Font License 1.1)
+   Variable weight 400-700, Latin + Latin Extended subsets only (133 KB).
+   Self-hosted rather than loaded from a CDN so the interface still renders
+   correctly when the clinic's internet is down or slow.
+   ========================================================================== */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/inter-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+/* ==========================================================================
+   Klinika CRM — design tokens
+   ========================================================================== */
+:root {
+  /* Neutral ramp (slate — sits better under a blue primary than pure gray) */
+  --gray-50:  #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  /* Semantic surfaces */
+  --bg:            var(--gray-50);
+  --surface:       #ffffff;
+  --surface-alt:   var(--gray-50);
+  --border:        var(--gray-200);
+  --border-strong: var(--gray-300);
+  --text:          var(--gray-900);
+  /* 7.6:1 on white, 7.2:1 on --bg. Replaces #6b7280, which measured 4.46:1
+     on the page background and failed WCAG AA for normal text. */
+  --text-muted:    var(--gray-600);
+  --muted:         var(--text-muted); /* legacy alias — .muted still works */
+
+  /* Brand + status */
+  --primary:       #2563eb;
+  --primary-dark:  #1d4ed8;
+  --primary-light: #eff6ff;
+  --danger:        #dc2626;
+  --danger-dark:   #b91c1c;
+  --danger-light:  #fef2f2;
+  --success:       #16a34a;
+  --success-light: #f0fdf4;
+
+  /* Darkened variants used for figures and labels, so colored text clears
+     WCAG AA on white. The base hues above are for borders and fills only —
+     #16a34a as text measures 3.4:1 and fails AA at normal sizes.
+
+     The palette stops here on purpose. Amber, violet and teal used to live
+     alongside these and were removed with the per-department tile colours:
+     a token nothing uses is an invitation to start decorating again. */
+  --primary-text: #1d4ed8;
+  --success-text: #15803d;
+  --danger-text:  #b91c1c;
+
+  /* Spacing — 4px base */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* Type scale */
+  --fs-xs:   0.8125rem;  /* 13px */
+  --fs-sm:   0.875rem;   /* 14px */
+  --fs-base: 1rem;       /* 16px */
+  --fs-md:   1.125rem;   /* 18px */
+  --fs-lg:   1.5rem;     /* 24px */
+  --fs-xl:   2rem;       /* 32px */
+  --fs-2xl:  2.5rem;     /* 40px */
+
+  /* Figures. The stat tiles run on their own scale rather than borrowing the
+     body scale, so a money figure is still legible from across the room — but
+     a restrained one. The whole scale has been pulled back twice from a first
+     attempt at 22px labels over 40px figures, which read as shouting.
+
+     Label to figure stays at about 1:1.45 throughout. Past roughly 1:2 the
+     number swamps the words beside it: the label stops being read and the
+     tile turns into a wall of digits. */
+  --fs-stat-label:      1.125rem;  /* 18px */
+  --fs-stat-value:      1.625rem;  /* 26px */
+  --fs-stat-unit:       0.875rem;  /* 14px */
+  --fs-stat-label-hero: 1.25rem;   /* 20px */
+  --fs-stat-value-hero: 1.875rem;  /* 30px */
+  --fs-stat-unit-hero:  1rem;      /* 16px */
+
+  --lh-tight: 1.25;
+  --lh-base:  1.5;
+
+  --fw-normal:   400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* Radius + elevation */
+  --radius-sm: 6px;
+  --radius:    8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06), 0 1px 3px rgba(15, 23, 42, .10);
+  --shadow-md: 0 4px 6px rgba(15, 23, 42, .05), 0 10px 15px rgba(15, 23, 42, .10);
+
+  /* Layout */
+  --sidebar-w:   240px;
+  --content-max: 1440px;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary); }
+
+.hidden { display: none !important; }
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   App shell — fixed sidebar + scrolling content
+   ========================================================================== */
+body.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100vh;
+}
+
+/* Assistants only have one page, so the sidebar is suppressed entirely
+   rather than rendering a nav with a single link to the current page. */
+body.app-shell.no-sidebar { grid-template-columns: 1fr; }
+body.app-shell.no-sidebar .sidebar { display: none; }
+
+/* The sidebar is the one deliberately dark surface in the app. The owner's
+   standing rule is no deep dark fills, but that rule is about the working
+   area — the panels and tiles they read figures off all day. The nav is
+   chrome rather than content, and the owner prefers it dark: a near-black
+   rail frames the white page beside it and keeps navigation clearly separate
+   from the data. It was lightened once and changed back on request. */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--gray-900);
+  border-right: 1px solid var(--gray-800);
+  padding: var(--sp-5) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.sidebar-brand {
+  padding: 0 var(--sp-5);
+  color: #fff;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.01em;
+}
+
+nav.mainnav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.nav-group-label {
+  padding: 0 var(--sp-5) var(--sp-1);
+  color: var(--gray-500);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+nav.mainnav a {
+  display: block;
+  padding: var(--sp-2) var(--sp-5);
+  color: var(--gray-300);
+  text-decoration: none;
+  font-size: var(--fs-base);
+  border-left: 3px solid transparent;
+}
+
+nav.mainnav a:hover {
+  background: var(--gray-800);
+  color: #fff;
+}
+
+nav.mainnav a.active {
+  background: var(--gray-800);
+  color: #fff;
+  border-left-color: var(--primary);
+  font-weight: var(--fw-semibold);
+}
+
+.app-main {
+  min-width: 0; /* lets wide tables scroll instead of blowing out the grid */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Top bar — page title + current user
+   ========================================================================== */
+header.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: var(--sp-3) var(--sp-5);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.page-title {
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+main.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-5);
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+h1 {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--sp-4);
+}
+
+h2 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  color: var(--gray-800);
+  margin: var(--sp-6) 0 var(--sp-3);
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* Money and other figures: right-aligned with fixed-width digits so columns
+   line up and can be compared down the page. */
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Cards + stats
+   ========================================================================== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-4);
+}
+
+/* Data-entry regions are tinted and accented; everything that *displays*
+   data (filter bars, tables, stat grids) stays white. That single rule holds
+   app-wide, so "blue panel = I am creating a record" is learnable once and
+   then true on every page — which is what separates the receipt forms from
+   the "So'nggi yozuvlar" list underneath them at a glance. */
+.card.entry-card {
+  background: var(--primary-light);
+  border-color: #bfdbfe;
+  border-left: 4px solid var(--primary);
+}
+
+.card.entry-card h2 {
+  margin-top: 0;
+  color: var(--primary-text);
+}
+
+/* Inputs need to stay white so the fields read as fillable against the
+   tinted panel rather than blending into it. */
+.card.entry-card input,
+.card.entry-card select,
+.card.entry-card textarea {
+  background: var(--surface);
+  border-color: #bfdbfe;
+}
+
+.card.entry-card .field label { color: var(--primary-text); }
+
+.grid {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-bottom: var(--sp-4);
+}
+
+/* A grid that a page populates from JS still occupies its bottom margin while
+   it is empty, which shows up as a gap during loading and on tabs that have
+   no total to render. */
+.grid:empty { display: none; }
+
+/* A group of exactly four figures reads as a balanced 2x2 block; left to
+   auto-fit it becomes a row of three with an orphan underneath. */
+.grid--quad { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+  .grid--quad { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   Stat tiles
+
+   The palette here is deliberately small. A figure is the most important
+   thing on the page, so it is near-black — the most legible colour there is —
+   and colour is spent only where it carries information:
+
+     blue rail    an ordinary figure
+     green        a result that is positive
+     red          a result that is negative
+
+   That is the whole vocabulary. Green and red never mean anything except the
+   sign of a result, so when the owner sees red anywhere on the screen it
+   always means the same thing. An earlier revision gave each department its
+   own hue (violet for Operatsiyalar, teal for Xonalar); those existed to
+   match the bars of the Hisobotlar chart and became decoration the moment the
+   chart was removed, so they are gone. Departments are told apart by their
+   labels, which is what labels are for.
+
+   Each tile resolves through three custom properties:
+
+     --accent     the 4px rail, and a tinted fill's border
+     --figure     the figure's colour; near-black unless the tile is a result
+     --accent-bg  tinted fill, used by --filled
+
+   One modifier rides on top:
+     .stat-card--filled   tints the whole tile — a soft grey for a group of
+                          related figures, or the result's own colour for the
+                          one figure a page exists to answer
+   -------------------------------------------------------------------------- */
+.stat-card {
+  --accent:     var(--border-strong);
+  --figure:     var(--text);
+  --accent-bg:  var(--surface);
+  --accent-border: var(--border);
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-5);
+
+  /* Lets the figure below size itself against this tile's own width. */
+  container-type: inline-size;
+}
+
+.stat-card .label {
+  font-size: var(--fs-stat-label);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+}
+
+/* The figure runs at its full size whenever the tile is wide enough and
+   steps down only when it would otherwise run past the tile's edge — an
+   eight-digit payroll total on a laptop is the case that forces this. The
+   plain font-size is the fallback for anything without container queries;
+   such a browser keeps the fixed size rather than losing the rule. */
+.stat-card .value {
+  font-size: var(--fs-stat-value);
+  font-size: clamp(1.125rem, 11cqi, var(--fs-stat-value));
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+  color: var(--figure);
+}
+
+/* "so'm" printed after a figure, smaller and lighter but in the figure's own
+   colour — a tile never mixes two hues in one line of text. */
+.stat-card .value .unit {
+  font-size: var(--fs-stat-unit);
+  font-size: clamp(0.75rem, 5.5cqi, var(--fs-stat-unit));
+  font-weight: var(--fw-medium);
+  color: inherit;
+  opacity: .65;
+  letter-spacing: 0;
+  margin-left: var(--sp-2);
+}
+
+/* Variants ---------------------------------------------------------------- */
+
+/* An ordinary figure: blue rail, black number. The fill is grey rather than
+   blue because a blue panel already means "this is where records are
+   created" (see .card.entry-card) and that meaning is worth keeping unique. */
+.stat-card--primary {
+  --accent: var(--primary);
+  --accent-bg: var(--gray-100);
+  --accent-border: var(--border);
+}
+
+.stat-card--success {
+  --accent: var(--success);
+  --figure: var(--success-text);
+  --accent-bg: var(--success-light);
+  --accent-border: #bbf7d0;
+}
+
+.stat-card--danger {
+  --accent: var(--danger);
+  --figure: var(--danger-text);
+  --accent-bg: var(--danger-light);
+  --accent-border: #fecaca;
+}
+
+/* Modifier ---------------------------------------------------------------- */
+.stat-card--filled {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  border-left-color: var(--accent);
+  box-shadow: none;
+}
+
+/* The one figure the page exists to show: full width, tinted, on its own
+   larger scale so it is read before anything else. This is the single place
+   a label is allowed to take the accent colour — on a tinted result tile a
+   grey label reads as if it belongs to a different card. */
+.stat-card--hero {
+  grid-column: 1 / -1;
+  padding: var(--sp-6);
+}
+
+.stat-card--hero .label {
+  font-size: var(--fs-stat-label-hero);
+  color: var(--figure);
+}
+
+.stat-card--hero .value {
+  font-size: var(--fs-stat-value-hero);
+  font-size: clamp(1.5rem, 11cqi, var(--fs-stat-value-hero));
+}
+
+.stat-card--hero .value .unit {
+  font-size: var(--fs-stat-unit-hero);
+  font-size: clamp(0.8125rem, 5.5cqi, var(--fs-stat-unit-hero));
+}
+
+@media (max-width: 720px) {
+  :root {
+    --fs-stat-label:      1rem;      /* 16px */
+    --fs-stat-value:      1.375rem;  /* 22px */
+    --fs-stat-unit:       0.8125rem; /* 13px */
+    --fs-stat-label-hero: 1.125rem;  /* 18px */
+    --fs-stat-value-hero: 1.625rem;  /* 26px */
+    --fs-stat-unit-hero:  0.875rem;  /* 14px */
+  }
+
+  .grid { grid-template-columns: 1fr; }
+  .stat-card--hero { padding: var(--sp-5); }
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+form.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.field label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+}
+
+input,
+select,
+button,
+textarea {
+  font-family: inherit;
+  font-size: var(--fs-base);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  line-height: 1.4;
+}
+
+input:hover,
+select:hover { border-color: var(--gray-400); }
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+  border-color: var(--primary);
+}
+
+button {
+  cursor: pointer;
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+button:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+button.secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+button.secondary:hover { background: var(--gray-100); }
+
+button.danger {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+button.danger:hover {
+  background: var(--danger-dark);
+  border-color: var(--danger-dark);
+}
+
+/* Explicit disabled colors instead of opacity:.6, which dropped a primary
+   button's label to ~2.5:1 and read as a rendering fault. */
+button:disabled,
+button:disabled:hover {
+  background: var(--gray-200);
+  color: var(--gray-500);
+  border-color: var(--gray-200);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--sp-3);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-base);
+}
+
+th, td {
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-alt); }
+
+tr.voided {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.actions-cell {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* Raised from 4px/0.78rem, which produced a ~23px control — under the 24px
+   WCAG 2.2 (SC 2.5.8) minimum target size. */
+.actions-cell button {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+}
+
+/* Empty + loading states -------------------------------------------------- */
+.table-empty:hover { background: transparent; }
+
+.table-empty td {
+  padding: var(--sp-7) var(--sp-4);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+}
+
+.is-loading {
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity .12s ease-in-out;
+}
+
+/* ==========================================================================
+   Tabs
+   ========================================================================== */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-1);
+  background: var(--gray-100);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.tabs button {
+  background: none;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-4);
+  font-weight: var(--fw-medium);
+}
+
+.tabs button:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.tabs button.active {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--primary-text);
+  font-weight: var(--fw-semibold);
+}
+
+/* ==========================================================================
+   Feedback
+   ========================================================================== */
+.error-box,
+.success-box {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-base);
+}
+
+.error-box {
+  background: var(--danger-light);
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.success-box {
+  background: var(--success-light);
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+.pagination {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Login
+   ========================================================================== */
+.center-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: var(--sp-4);
+}
+
+.login-card {
+  width: 360px;
+  max-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-6);
+}
+
+.login-card h1 {
+  text-align: center;
+  margin-bottom: var(--sp-5);
+}
+
+.login-card .field { margin-bottom: var(--sp-3); }
+.login-card .field input { width: 100%; }
+
+.login-card button {
+  width: 100%;
+  margin-top: var(--sp-3);
+  padding: var(--sp-3);
+}
+
+/* ==========================================================================
+   Minimal responsive guard (a full responsive pass is a separate task)
+   ========================================================================== */
+@media (max-width: 1000px) {
+  body.app-shell { grid-template-columns: 1fr; }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  nav.mainnav { flex-direction: row; flex-wrap: wrap; gap: var(--sp-2); }
+  .nav-group { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .nav-group-label { display: none; }
+
+  nav.mainnav a {
+    padding: var(--sp-2) var(--sp-3);
+    border-left: none;
+    border-radius: var(--radius-sm);
+  }
+
+  nav.mainnav a.active { border-left: none; background: var(--primary); }
+}
+
+
+/* An action that belongs to whichever tab is selected — Hisobotlar's Excel
+   export — rides on the right of the tab bar rather than floating beside the
+   stat tiles. It opts out of the segmented-control look .tabs button applies.
+
+   (This replaces the .summary-bar rules that used to live here; they were
+   inline style= attributes in reports.html, moved into the stylesheet so the
+   Content-Security-Policy can keep a strict style-src 'self'.) */
+.tabs .tabs-action {
+  margin-left: auto;
+  align-self: center;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.tabs .tabs-action:hover {
+  background: var(--gray-100);
+  color: var(--text);
+}

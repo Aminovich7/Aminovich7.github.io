@@ -1,0 +1,163 @@
+/* Demo-only additions: the demo bar, the guide dialog and the demo-account
+   picker on the login page. Uses the app's own design tokens. */
+
+.center-page {
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  align-content: center;
+  padding-bottom: 96px;
+}
+
+.demo-accounts {
+  width: 380px;
+  max-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-6);
+}
+.demo-accounts h2 {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-md);
+}
+.demo-accounts p {
+  margin: 0 0 var(--sp-4);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.demo-accounts__roles {
+  display: grid;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+.demo-accounts__role {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "role code" "what what";
+  row-gap: 2px;
+  align-items: center;
+  column-gap: var(--sp-3);
+  text-align: left;
+  white-space: normal;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: var(--sp-3) var(--sp-4);
+}
+.demo-accounts__role:hover,
+.demo-accounts__role:focus-visible {
+  background: var(--gray-50);
+  border-color: var(--primary);
+}
+.demo-accounts__role strong { grid-area: role; font-size: var(--fs-base); }
+.demo-accounts__role span { grid-area: what; color: var(--text-muted); font-size: var(--fs-sm); font-weight: var(--fw-normal); }
+.demo-accounts__role code {
+  grid-area: code;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  background: var(--gray-100);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+.demo-accounts__note { margin: 0 !important; font-size: var(--fs-xs) !important; }
+
+.demo-bar {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100vw - 32px);
+  padding: 6px 6px 6px 14px;
+  background: var(--gray-900);
+  color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.28);
+  font-size: var(--fs-sm);
+}
+.demo-bar__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 6px;
+  font-weight: var(--fw-semibold);
+}
+.demo-bar__badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+}
+.demo-bar button,
+.demo-bar a {
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: #fff;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 4px 12px;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.demo-bar button:hover,
+.demo-bar a:hover,
+.demo-bar button:focus-visible,
+.demo-bar a:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.demo-guide {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  background: rgba(15, 23, 42, 0.45);
+}
+.demo-guide__panel {
+  width: 560px;
+  max-width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-6);
+}
+.demo-guide__panel h2 { margin: 0 0 var(--sp-3); font-size: var(--fs-lg); }
+.demo-guide__panel h3 { margin: var(--sp-5) 0 var(--sp-2); font-size: var(--fs-base); }
+.demo-guide__panel p { margin: 0 0 var(--sp-3); color: var(--text-muted); }
+.demo-guide__panel ul { margin: 0; padding-left: 1.2em; }
+.demo-guide__panel li { margin-bottom: var(--sp-2); }
+.demo-guide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+/* Keep the last rows of long pages clear of the demo bar. */
+body.app-shell main.container { padding-bottom: 96px; }
+
+@media (max-width: 640px) {
+  .demo-bar { left: 8px; right: 8px; bottom: 8px; max-width: none; border-radius: var(--radius-lg); justify-content: center; gap: 0; padding: 4px; font-size: var(--fs-xs); }
+  .demo-bar__badge { width: 100%; justify-content: center; margin: 2px 0; font-size: var(--fs-xs); }
+  .demo-bar button, .demo-bar a { font-size: var(--fs-xs); padding: 3px 9px; }
+}
+
+@media print {
+  .demo-bar, .demo-guide, .demo-accounts { display: none !important; }
+}

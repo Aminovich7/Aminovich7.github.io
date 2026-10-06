@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="uz" data-demo-lang="uz">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sozlamalar — Klinika CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Klinika CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Asosiy menyu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Chiqish</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Moliyaviy sozlamalar</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<div class="card">
+  <form class="inline-form" id="settings-form">
+    <div class="field">
+      <label for="default_minus_beshming">Standart minus beshming</label>
+      <input type="text" inputmode="numeric" id="default_minus_beshming" required>
+    </div>
+    <button type="submit">Saqlash</button>
+  </form>
+  <p class="muted" id="settings-meta"></p>
+</div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/settings.js?v=1"></script>
+
+</body>
+</html>

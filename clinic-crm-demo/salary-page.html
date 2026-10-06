@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" data-demo-lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Salaries — Clinic CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Clinic CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Main menu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Log out</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Salaries</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<h2>Balance (earned / paid)</h2>
+<div class="card">
+  <form class="inline-form" id="balance-form">
+    <div class="field">
+      <label for="balance_staff">Staff member</label>
+      <select id="balance_staff"><option value="">— all —</option></select>
+    </div>
+    <div class="field">
+      <label for="balance_from">From</label>
+      <input type="date" id="balance_from">
+    </div>
+    <div class="field">
+      <label for="balance_to">To</label>
+      <input type="date" id="balance_to">
+    </div>
+    <button type="submit">Show</button>
+    <button type="button" class="secondary" id="current-month-btn">This month</button>
+    <button type="button" class="secondary" id="previous-month-btn">Last month</button>
+    <button type="button" class="secondary" id="last-week-btn">Last week</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Clear</button>
+  </form>
+  <p class="muted" id="balance-period-label"></p>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Staff member</th>
+        <th>Role</th>
+        <th class="num">Earned</th>
+        <th class="num">Paid</th>
+        <th class="num">Remaining</th>
+      </tr>
+    </thead>
+    <tbody id="balance-tbody"></tbody>
+  </table>
+</div>
+
+<h2>Add a payment</h2>
+<div class="card entry-card">
+  <form class="inline-form" id="payment-form">
+    <div class="field">
+      <label for="pay_staff">Staff member</label>
+      <select id="pay_staff" required></select>
+    </div>
+    <div class="field">
+      <label for="pay_type">Type</label>
+      <select id="pay_type" required>
+        <option value="full">Full salary</option>
+        <option value="avans">Advance</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="pay_month">Month</label>
+      <select id="pay_month" required></select>
+    </div>
+    <div class="field">
+      <label for="pay_year">Year</label>
+      <select id="pay_year" required></select>
+    </div>
+    <div class="field">
+      <label for="pay_amount">Amount (so'm)</label>
+      <input type="text" inputmode="numeric" id="pay_amount" required>
+    </div>
+    <button type="submit">Save</button>
+  </form>
+</div>
+
+<h2>Payment history</h2>
+<div class="card">
+  <form class="inline-form" id="history-filter-form">
+    <div class="field">
+      <label for="history_staff">Staff member</label>
+      <select id="history_staff"><option value="">— all —</option></select>
+    </div>
+    <div class="field">
+      <label for="history_from">From</label>
+      <input type="date" id="history_from">
+    </div>
+    <div class="field">
+      <label for="history_to">To</label>
+      <input type="date" id="history_to">
+    </div>
+    <button type="submit">Search</button>
+    <button type="button" class="secondary" id="history-current-month-btn">This month</button>
+    <button type="button" class="secondary" id="history-previous-month-btn">Last month</button>
+    <button type="button" class="secondary" id="history-last-week-btn">Last week</button>
+    <button type="button" class="secondary" id="history-clear-btn">Clear</button>
+  </form>
+  <p class="muted" id="history-period-label"></p>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Paid on</th>
+        <th>Staff member</th>
+        <th>Type</th>
+        <th>Period</th>
+        <th class="num">Amount</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="history-tbody"></tbody>
+  </table>
+</div>
+<div class="pagination" id="history-pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/oyliklar.js?v=1"></script>
+
+</body>
+</html>

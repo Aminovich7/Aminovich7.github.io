@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-demo-lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reports — Clinic CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Clinic CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Main menu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Log out</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Reports</h1>
+
+<div class="card">
+  <form class="inline-form" id="range-form">
+    <div class="field">
+      <label for="date_from">From</label>
+      <input type="date" id="date_from">
+    </div>
+    <div class="field">
+      <label for="date_to">To</label>
+      <input type="date" id="date_to">
+    </div>
+    <button type="submit">Apply</button>
+    <button type="button" class="secondary" id="current-month-btn">This month</button>
+    <button type="button" class="secondary" id="previous-month-btn">Last month</button>
+    <button type="button" class="secondary" id="last-week-btn">Last week</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Clear</button>
+  </form>
+  <p class="muted" id="period-label"></p>
+</div>
+
+<div id="error-container"></div>
+
+<div class="tabs">
+  <button type="button" class="report-tab-btn active" data-report="total">Overview</button>
+  <button type="button" class="report-tab-btn" data-report="consultations">Consultations</button>
+  <button type="button" class="report-tab-btn" data-report="surgeries">Surgeries</button>
+  <button type="button" class="report-tab-btn" data-report="rooms">Rooms</button>
+  <button type="button" class="report-tab-btn" data-report="doctor">By doctor</button>
+  <button type="button" class="secondary tabs-action" id="export-btn">Download Excel</button>
+</div>
+
+<div class="card hidden" id="doctor-select-card">
+  <div class="field">
+    <label for="report-doctor-select">Doctor</label>
+    <select id="report-doctor-select"></select>
+  </div>
+</div>
+
+<div class="grid" id="report-summary"></div>
+<div class="grid" id="report-total"></div>
+
+<div class="table-wrap">
+  <table>
+    <thead id="doctor-thead">
+      <tr><th>Doctor</th><th class="num">Total share</th><th class="num">Records</th></tr>
+    </thead>
+    <tbody id="doctor-tbody"></tbody>
+  </table>
+</div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/reports.js?v=1"></script>
+
+</body>
+</html>

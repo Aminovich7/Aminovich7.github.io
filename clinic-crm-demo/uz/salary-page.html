@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="uz" data-demo-lang="uz">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oyliklar — Klinika CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Klinika CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Asosiy menyu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Chiqish</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Oyliklar</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<h2>Balans (qancha ishlab topdi / to'landi)</h2>
+<div class="card">
+  <form class="inline-form" id="balance-form">
+    <div class="field">
+      <label for="balance_staff">Ishchi</label>
+      <select id="balance_staff"><option value="">— barchasi —</option></select>
+    </div>
+    <div class="field">
+      <label for="balance_from">Dan</label>
+      <input type="date" id="balance_from">
+    </div>
+    <div class="field">
+      <label for="balance_to">Gacha</label>
+      <input type="date" id="balance_to">
+    </div>
+    <button type="submit">Ko'rish</button>
+    <button type="button" class="secondary" id="current-month-btn">Joriy oy</button>
+    <button type="button" class="secondary" id="previous-month-btn">O'tgan oy</button>
+    <button type="button" class="secondary" id="last-week-btn">O'tgan hafta</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Tozalash</button>
+  </form>
+  <p class="muted" id="balance-period-label"></p>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Ishchi</th>
+        <th>Lavozim</th>
+        <th class="num">Ishlab topgani</th>
+        <th class="num">To'langan</th>
+        <th class="num">Qoldiq</th>
+      </tr>
+    </thead>
+    <tbody id="balance-tbody"></tbody>
+  </table>
+</div>
+
+<h2>To'lov qo'shish</h2>
+<div class="card entry-card">
+  <form class="inline-form" id="payment-form">
+    <div class="field">
+      <label for="pay_staff">Ishchi</label>
+      <select id="pay_staff" required></select>
+    </div>
+    <div class="field">
+      <label for="pay_type">Turi</label>
+      <select id="pay_type" required>
+        <option value="full">To'liq oylik</option>
+        <option value="avans">Avans</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="pay_month">Oy</label>
+      <select id="pay_month" required></select>
+    </div>
+    <div class="field">
+      <label for="pay_year">Yil</label>
+      <select id="pay_year" required></select>
+    </div>
+    <div class="field">
+      <label for="pay_amount">Summa (so'm)</label>
+      <input type="text" inputmode="numeric" id="pay_amount" required>
+    </div>
+    <button type="submit">Saqlash</button>
+  </form>
+</div>
+
+<h2>To'lovlar tarixi</h2>
+<div class="card">
+  <form class="inline-form" id="history-filter-form">
+    <div class="field">
+      <label for="history_staff">Ishchi</label>
+      <select id="history_staff"><option value="">— barchasi —</option></select>
+    </div>
+    <div class="field">
+      <label for="history_from">Dan</label>
+      <input type="date" id="history_from">
+    </div>
+    <div class="field">
+      <label for="history_to">Gacha</label>
+      <input type="date" id="history_to">
+    </div>
+    <button type="submit">Qidirish</button>
+    <button type="button" class="secondary" id="history-current-month-btn">Joriy oy</button>
+    <button type="button" class="secondary" id="history-previous-month-btn">O'tgan oy</button>
+    <button type="button" class="secondary" id="history-last-week-btn">O'tgan hafta</button>
+    <button type="button" class="secondary" id="history-clear-btn">Tozalash</button>
+  </form>
+  <p class="muted" id="history-period-label"></p>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>To'langan sana</th>
+        <th>Ishchi</th>
+        <th>Turi</th>
+        <th>Davr</th>
+        <th class="num">Summa</th>
+        <th>Amallar</th>
+      </tr>
+    </thead>
+    <tbody id="history-tbody"></tbody>
+  </table>
+</div>
+<div class="pagination" id="history-pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/oyliklar.js?v=1"></script>
+
+</body>
+</html>

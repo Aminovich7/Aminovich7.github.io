@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mukhammad Batoshev</title>
+<meta name="description" content="Mukhammad Batoshev, Python backend developer in Tashkent. FastAPI and Django REST Framework. Featured: a clinic finance and payroll system built with FastAPI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Martian+Mono:wdth,wght@75..112.5,400..700&family=Public+Sans:ital,wght@0,400..700;1,400&display=swap">
+<style>
+/* Layout: one left-aligned column (max 70rem). The hero pairs the name, set wide, with a printed clinic receipt computed by the CRM; the Clinic CRM case study is the long centrepiece; other work follows as ruled rows grouped by framework, then a dated path, skills and contact. */
+:root {
+  --paper: #F1F4F3;
+  --surface: #FFFFFF;
+  --ink: #0F1D1A;
+  --muted: #53635E;
+  --line: #D2DBD8;
+  --accent: #0A7366;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DCEDE9;
+  --receipt: #FFFEF7;
+  --receipt-ink: #26251F;
+  --receipt-muted: #6F6B61;
+  --shadow: 0 1px 2px rgb(15 29 26 / .06), 0 14px 36px -14px rgb(15 29 26 / .25);
+  --drop: drop-shadow(0 16px 22px rgb(15 29 26 / .16)) drop-shadow(0 2px 3px rgb(15 29 26 / .08));
+
+  --f-display: "Archivo", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Public Sans", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --f-mono: "Martian Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --t-xs: .75rem;
+  --t-sm: .875rem;
+  --t-md: 1rem;
+  --t-lg: 1.1875rem;
+  --t-xl: 1.5rem;
+  --t-2xl: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem);
+  --t-hero: clamp(2.6rem, 1.1rem + 6vw, 5.4rem);
+
+  --gutter: clamp(16px, 4vw, 40px);
+  --section: clamp(3.5rem, 8vw, 6.5rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0D1513;
+    --surface: #131D1A;
+    --ink: #E3EBE8;
+    --muted: #94A49F;
+    --line: #26332F;
+    --accent: #43C2AF;
+    --accent-ink: #06211D;
+    --accent-soft: #15302B;
+    --receipt: #D8D4C7;
+    --receipt-ink: #1F1E1A;
+    --receipt-muted: #57544B;
+    --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 14px 36px -14px rgb(0 0 0 / .7);
+    --drop: drop-shadow(0 16px 24px rgb(0 0 0 / .55)) drop-shadow(0 2px 3px rgb(0 0 0 / .4));
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0D1513;
+  --surface: #131D1A;
+  --ink: #E3EBE8;
+  --muted: #94A49F;
+  --line: #26332F;
+  --accent: #43C2AF;
+  --accent-ink: #06211D;
+  --accent-soft: #15302B;
+  --receipt: #D8D4C7;
+  --receipt-ink: #1F1E1A;
+  --receipt-muted: #57544B;
+  --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 14px 36px -14px rgb(0 0 0 / .7);
+  --drop: drop-shadow(0 16px 24px rgb(0 0 0 / .55)) drop-shadow(0 2px 3px rgb(0 0 0 / .4));
+  color-scheme: dark;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--t-md)/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.wrap { max-width: 70rem; margin-inline: auto; padding-inline: var(--gutter); }
+a { color: var(--accent); text-underline-offset: .18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+ul, ol, dl, dd, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+
+.eyebrow {
+  font: 500 var(--t-xs)/1.4 var(--f-mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ext::after { content: " ↗"; font-family: var(--f-body); }
+
+/* ---------- top bar ---------- */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem 1.5rem; flex-wrap: wrap;
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+.mark {
+  display: inline-flex; align-items: center; gap: .65rem;
+  color: var(--ink); text-decoration: none;
+  font: 700 var(--t-sm)/1 var(--f-body);
+}
+.mark b {
+  display: grid; place-items: center; width: 2.1rem; height: 2.1rem;
+  border: 1.5px solid var(--ink); border-radius: 6px;
+  font: 700 .72rem/1 var(--f-mono); letter-spacing: .02em;
+}
+.nav { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+.nav a { color: var(--muted); text-decoration: none; font-size: var(--t-sm); font-weight: 500; }
+.nav a:hover { color: var(--ink); }
+
+/* ---------- hero ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, .8fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+  padding-block: clamp(3rem, 8vw, 6rem) clamp(3rem, 7vw, 5.5rem);
+}
+.hero-copy { container-type: inline-size; min-width: 0; }
+.hero h1 {
+  font-family: var(--f-display);
+  font-stretch: 125%;
+  font-weight: 860;
+  font-size: var(--t-hero);
+  font-size: clamp(2.3rem, 12.4cqi, 5.4rem);
+  line-height: .93;
+  letter-spacing: -.025em;
+  margin-block: 1rem 1.6rem;
+}
+.hero h1 span { display: block; }
+.lead { font-size: var(--t-lg); line-height: 1.55; max-width: 34em; }
+.open {
+  display: inline-flex; align-items: center; gap: .55rem;
+  margin-top: 1.4rem;
+  font: 500 var(--t-xs)/1.4 var(--f-mono); color: var(--muted);
+}
+.open::before {
+  content: ""; width: .55rem; height: .55rem; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.8rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .78rem 1.1rem;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); color: var(--ink);
+  font: 600 .9375rem/1 var(--f-body); text-decoration: none;
+  transition: border-color .15s, background-color .15s, transform .15s;
+}
+.btn:hover { border-color: var(--ink); text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); }
+@media (prefers-reduced-motion: no-preference) { .btn:active { transform: translateY(1px); } }
+.stackline {
+  margin-top: 2.2rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+  font: 400 var(--t-xs)/1.9 var(--f-mono); color: var(--muted);
+}
+
+/* receipt */
+.receipt-fig { justify-self: center; width: min(100%, 22.5rem); display: grid; gap: 1.6rem; }
+.receipt-tilt { filter: var(--drop); transform: rotate(-1.8deg); }
+.receipt {
+  --tooth: 14px;
+  background: var(--receipt); color: var(--receipt-ink);
+  font: 400 .74rem/1.6 var(--f-mono);
+  font-variant-numeric: tabular-nums;
+  padding: 1.35rem 1.25rem calc(1.2rem + var(--tooth));
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / var(--tooth) 100%;
+          mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / var(--tooth) 100%;
+}
+.r-head { text-align: center; font-weight: 700; letter-spacing: .14em; font-size: .76rem; }
+.r-sub { text-align: center; color: var(--receipt-muted); font-size: .66rem; letter-spacing: .08em; margin-top: .15rem; }
+.r-rule { border: 0; border-top: 1px solid currentColor; opacity: .55; margin: .8rem 0; }
+.r-rule.dash { border-top-style: dashed; }
+.r-meta, .r-line { display: flex; justify-content: space-between; gap: 1rem; }
+.r-meta { color: var(--receipt-muted); font-size: .68rem; }
+.r-lines { display: grid; gap: .3rem; }
+.r-line dt { min-width: 0; }
+.r-line dt i { display: block; font-style: normal; color: var(--receipt-muted); font-size: .64rem; line-height: 1.35; }
+.r-line dd { white-space: nowrap; }
+.r-total dt, .r-total dd { font-weight: 700; }
+.r-formula { margin-top: .9rem; color: var(--receipt-muted); font-size: .64rem; line-height: 1.7; }
+.r-foot { margin-top: .7rem; text-align: center; font-size: .64rem; letter-spacing: .1em; color: var(--receipt-muted); }
+.receipt-fig figcaption { font-size: var(--t-sm); color: var(--muted); line-height: 1.5; max-width: 22rem; }
+
+/* ---------- sections ---------- */
+.section { padding-block: var(--section); border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: .8rem; max-width: 46rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.sec-head h2 {
+  font-family: var(--f-display); font-stretch: 118%; font-weight: 820;
+  font-size: var(--t-2xl); line-height: 1.02; letter-spacing: -.02em;
+}
+.sec-head .sub { font-size: var(--t-lg); color: var(--muted); max-width: 40em; }
+h3.block {
+  font-family: var(--f-display); font-stretch: 108%; font-weight: 750;
+  font-size: var(--t-xl); line-height: 1.15; letter-spacing: -.01em;
+  margin-bottom: 1.2rem;
+}
+.block-gap { margin-top: clamp(3rem, 6vw, 4.5rem); }
+
+/* case study meta + stats */
+.meta {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem 2.5rem; margin-bottom: 2.4rem;
+}
+.meta div { display: grid; gap: .25rem; align-content: start; min-width: 0; }
+.meta dt { font: 500 var(--t-xs)/1.4 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.meta dd { font-size: var(--t-md); }
+.stats {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-block: 1px solid var(--line);
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+}
+.stats li { padding: 1.2rem 1.2rem 1.2rem 0; display: grid; gap: .2rem; min-width: 0; }
+.stats li + li { padding-left: 1.2rem; border-left: 1px solid var(--line); }
+.stats strong {
+  font: 600 var(--t-2xl)/1 var(--f-mono); font-stretch: 90%;
+  font-variant-numeric: tabular-nums; letter-spacing: -.03em;
+}
+.stats span { font-size: var(--t-sm); color: var(--muted); }
+
+/* screenshots */
+.shots { display: grid; gap: 1rem; }
+.tabs {
+  display: flex; gap: .35rem; overflow-x: auto; padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+.tab {
+  flex: none; cursor: pointer;
+  padding: .55rem .9rem; border-radius: 7px;
+  border: 1px solid transparent; background: transparent; color: var(--muted);
+  font: 600 var(--t-sm)/1 var(--f-body);
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.frame {
+  border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  background: var(--surface); box-shadow: var(--shadow);
+}
+.frame-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .55rem .9rem; border-bottom: 1px solid var(--line);
+  font: 400 var(--t-xs)/1.4 var(--f-mono); color: var(--muted);
+}
+.frame img { display: block; width: 100%; height: auto; }
+.panel figcaption { margin-top: .85rem; font-size: var(--t-sm); color: var(--muted); max-width: 52rem; }
+
+/* problem */
+.prose { max-width: 40rem; display: grid; gap: 1rem; font-size: var(--t-lg); line-height: 1.6; }
+
+/* modules */
+.modules { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.8rem 1.6rem; }
+.modules li { border-top: 2px solid var(--ink); padding-top: .9rem; display: grid; gap: .3rem; align-content: start; min-width: 0; }
+.modules b { font-weight: 700; }
+.modules em { font: normal 400 .7rem/1.4 var(--f-mono); color: var(--muted); }
+.modules p { font-size: var(--t-sm); color: var(--muted); line-height: 1.55; }
+
+/* architecture */
+.arch {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) auto minmax(0, 1.7fr) auto minmax(0, 1fr);
+  align-items: center; gap: .9rem;
+}
+.node {
+  border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+  padding: 1rem 1.05rem; display: grid; gap: .35rem; min-width: 0;
+}
+.node-k { font: 600 var(--t-xs)/1.4 var(--f-mono); letter-spacing: .04em; color: var(--ink); }
+.node p { font-size: var(--t-sm); color: var(--muted); line-height: 1.5; }
+.node.app { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-top: .35rem; }
+.chain li {
+  font: 500 .7rem/1 var(--f-mono); padding: .45rem .55rem;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--paper);
+}
+.chain li + li::before { content: "→"; margin-right: .4rem; color: var(--muted); }
+.chain li + li { border: 0; background: none; padding-left: 0; }
+.chain li + li span {
+  display: inline-block; padding: .45rem .55rem;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--paper);
+}
+.chain li:first-child { padding: 0; border: 0; background: none; }
+.chain li:first-child span {
+  display: inline-block; padding: .45rem .55rem;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--paper);
+}
+.stores { display: grid; gap: .9rem; min-width: 0; }
+.link {
+  display: grid; justify-items: center; gap: .2rem;
+  font: 400 .66rem/1.3 var(--f-mono); color: var(--muted); text-align: center;
+}
+.link::after { content: "⟶"; font-size: 1.3rem; line-height: 1; color: var(--muted); }
+.arch-note { margin-top: 1rem; font-size: var(--t-sm); color: var(--muted); max-width: 46rem; }
+
+/* decisions */
+.decisions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 3rem; }
+.decisions li { display: grid; gap: .5rem; align-content: start; border-top: 1px solid var(--line); padding-top: 1.1rem; min-width: 0; }
+.decisions h4 { font-size: var(--t-lg); font-weight: 700; line-height: 1.3; }
+.decisions p { color: var(--muted); }
+code {
+  font: 500 .84em/1 var(--f-mono); padding: .1em .35em; border-radius: 4px;
+  background: var(--accent-soft); color: var(--ink); white-space: nowrap;
+}
+
+.case-cta {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem;
+  padding: 1.4rem 1.5rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface);
+}
+.case-cta p { color: var(--muted); font-size: var(--t-sm); max-width: 34rem; flex: 1 1 18rem; }
+
+.demo-cta {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem); padding: 1.4rem 1.5rem;
+  border: 1px solid var(--accent); border-radius: 12px; background: var(--accent-soft);
+}
+.demo-cta > div { flex: 1 1 22rem; display: grid; gap: .35rem; min-width: 0; }
+.demo-cta-k { font: 500 var(--t-xs)/1.4 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.demo-cta h3 { font-size: var(--t-lg); font-weight: 700; line-height: 1.3; }
+.demo-cta p:not(.demo-cta-k) { color: var(--muted); max-width: 42rem; }
+
+/* ---------- projects ---------- */
+.group + .group { margin-top: clamp(2.8rem, 6vw, 4rem); }
+.group-title {
+  display: flex; align-items: baseline; gap: .8rem;
+  font: 700 var(--t-xs)/1.4 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: .2rem;
+}
+.group-title span { color: var(--muted); font-weight: 400; letter-spacing: .04em; text-transform: none; }
+.proj {
+  display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: .6rem 2.5rem; padding-block: 1.6rem; border-bottom: 1px solid var(--line);
+}
+.proj-head { display: grid; gap: .45rem; align-content: start; }
+.proj h4 { font-family: var(--f-display); font-stretch: 104%; font-weight: 750; font-size: var(--t-xl); line-height: 1.15; }
+.proj h4 a { color: var(--ink); text-decoration: none; }
+.proj h4 a:hover { color: var(--accent); }
+.proj-when { font: 400 var(--t-xs)/1.5 var(--f-mono); color: var(--muted); }
+.badge {
+  justify-self: start; font: 600 .66rem/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase;
+  padding: .35rem .5rem; border-radius: 4px; background: var(--accent-soft); color: var(--ink);
+}
+.proj-body { display: grid; gap: .8rem; min-width: 0; }
+.proj-body > p { max-width: 42rem; }
+.points { display: grid; gap: .4rem; color: var(--muted); max-width: 44rem; }
+.points li { position: relative; padding-left: 1.1rem; }
+.points li::before { content: ""; position: absolute; left: 0; top: .72em; width: .45rem; height: 1px; background: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tags li {
+  font: 500 .68rem/1 var(--f-mono); padding: .42rem .55rem;
+  border: 1px solid var(--line); border-radius: 4px; color: var(--muted);
+}
+
+/* ---------- path ---------- */
+.path { display: grid; gap: 0; max-width: 52rem; }
+.path li {
+  display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1.5rem;
+  padding-block: 1.1rem; border-top: 1px solid var(--line);
+}
+.path li:last-child { border-bottom: 1px solid var(--line); }
+.path time { font: 600 var(--t-sm)/1.5 var(--f-mono); font-variant-numeric: tabular-nums; }
+.path b { display: block; font-weight: 700; margin-bottom: .2rem; }
+.path p { color: var(--muted); }
+.path li.now time { color: var(--accent); }
+
+/* ---------- skills ---------- */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; }
+.skills div { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 1rem; padding-block: .95rem; border-top: 1px solid var(--line); }
+.skills dt { font: 500 var(--t-xs)/1.6 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- contact ---------- */
+.contact h2 {
+  font-family: var(--f-display); font-stretch: 125%; font-weight: 860;
+  font-size: var(--t-hero); line-height: .95; letter-spacing: -.025em;
+}
+.contact .sub { margin-top: 1.2rem; font-size: var(--t-lg); color: var(--muted); max-width: 34em; }
+.channels { margin-top: 2.2rem; display: grid; max-width: 44rem; }
+.channels li {
+  display: grid; grid-template-columns: 7rem minmax(0, 1fr) auto; align-items: center; gap: 1rem;
+  padding-block: 1rem; border-top: 1px solid var(--line);
+}
+.channels li:last-child { border-bottom: 1px solid var(--line); }
+.channels .k { font: 500 var(--t-xs)/1.4 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.channels .v { font: 500 var(--t-lg)/1.3 var(--f-body); color: var(--ink); overflow-wrap: anywhere; user-select: all; }
+.channels a.v { text-decoration: none; }
+.channels a.v:hover { color: var(--accent); }
+.copy {
+  cursor: pointer; padding: .5rem .8rem; border-radius: 7px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  font: 600 var(--t-sm)/1 var(--f-body);
+}
+.copy:hover { border-color: var(--ink); }
+.foot {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem;
+  padding-block: 1.6rem 2.4rem; border-top: 1px solid var(--line);
+  font: 400 var(--t-xs)/1.6 var(--f-mono); color: var(--muted);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1000px) {
+  .modules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .arch { grid-template-columns: minmax(0, 1fr); }
+  .link { grid-auto-flow: column; justify-content: start; align-items: center; gap: .6rem; padding-left: 1.1rem; }
+  .link::after { content: "↓"; font-size: 1.1rem; order: -1; }
+}
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .receipt-fig { justify-self: start; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats li:nth-child(3) { padding-left: 0; border-left: 0; }
+  .stats li:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .decisions, .skills { grid-template-columns: minmax(0, 1fr); }
+  .proj { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .meta { grid-template-columns: minmax(0, 1fr); }
+  .modules { grid-template-columns: minmax(0, 1fr); }
+  .path li { grid-template-columns: minmax(0, 1fr); gap: .3rem; }
+  .skills div { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+  .channels li { grid-template-columns: minmax(0, 1fr) auto; }
+  .channels .k { grid-column: 1 / -1; }
+  .receipt-tilt { transform: none; }
+}
+</style>
+<link rel="canonical" href="https://aminovich7.github.io/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mukhammad Batoshev">
+<meta property="og:title" content="Mukhammad Batoshev — Python Backend Developer">
+<meta property="og:description" content="FastAPI and Django REST Framework. Featured: a clinic finance and payroll system, with a live demo you can use.">
+<meta property="og:url" content="https://aminovich7.github.io/">
+<meta property="og:image" content="https://aminovich7.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#top" aria-label="Mukhammad Batoshev, back to top"><b>MB</b>Mukhammad Batoshev</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#case-study">Case study</a>
+      <a href="#projects">Projects</a>
+      <a href="#path">Path</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Python backend developer · Tashkent, Uzbekistan</p>
+      <h1><span>Mukhammad</span> <span>Batoshev</span></h1>
+      <p class="lead">I build backend systems with FastAPI and Django REST Framework. My latest is a finance and payroll system for a private clinic. I designed, built, tested and deployed it on my own, to replace the clinic's spreadsheets and paper receipts.</p>
+      <p class="open">Open to backend developer roles</p>
+      <div class="actions">
+        <a class="btn primary" href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Try the live demo <span aria-hidden="true">↗</span></a>
+        <a class="btn" href="#case-study">Clinic case study <span aria-hidden="true">↓</span></a>
+        <a class="btn" href="https://github.com/Aminovich7" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+        <a class="btn" href="https://t.me/Aminovich7" target="_blank" rel="noopener">Telegram <span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="stackline">FastAPI · Django REST Framework · Django · PostgreSQL · SQLAlchemy 2.0 · Alembic · Redis · Celery · Docker · pytest</p>
+    </div>
+
+    <figure class="receipt-fig">
+      <div class="receipt-tilt">
+        <div class="receipt">
+          <p class="r-head">KLINIKA CRM</p>
+          <p class="r-sub">KVITANSIYA · RECEIPT</p>
+          <hr class="r-rule">
+          <div class="r-meta"><span>№ 10581</span><span>30.09.2026 15:45</span></div>
+          <div class="r-meta"><span>Shifokor: Karimov Aziz</span></div>
+          <hr class="r-rule">
+          <dl class="r-lines">
+            <div class="r-line"><dt>Qayta ko'rik<i>follow-up visit</i></dt><dd>80,000</dd></div>
+            <div class="r-line"><dt>Minus beshming<i>fixed deduction</i></dt><dd>−5,000</dd></div>
+            <div class="r-line"><dt>Shifokor foizi<i>doctor's rate</i></dt><dd>50%</dd></div>
+          </dl>
+          <hr class="r-rule dash">
+          <dl class="r-lines">
+            <div class="r-line r-total"><dt>Shifokor ulushi<i>doctor's share</i></dt><dd>37,500</dd></div>
+            <div class="r-line r-total"><dt>Klinika ulushi<i>clinic's share</i></dt><dd>37,500</dd></div>
+          </dl>
+          <p class="r-formula">(80,000 − 5,000) × 50% = 37,500<br>80,000 − 37,500 − 5,000 = 37,500</p>
+          <p class="r-foot">SO'M · ROUNDED PER RECEIPT</p>
+        </div>
+      </div>
+      <figcaption>A receipt as the Clinic CRM computes it: whole soums, rounded per receipt before any total is summed. Demo data.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== CASE STUDY ===================== -->
+  <section class="section" id="case-study">
+    <header class="sec-head">
+      <p class="eyebrow">Featured project · FastAPI · deployed</p>
+      <h2>Clinic CRM</h2>
+      <p class="sub">A web application that runs the money side of a private clinic: patient receipts, each doctor's commission, staff salaries and advances, overtime shifts, the pharmacy account and day-to-day expenses, with reports for any period. Assistants enter receipts, managers run payroll and expenses, and the owner sees the whole picture. It is built to replace the clinic's Excel spreadsheets and paper records, and is deployed and about to go into use.</p>
+    </header>
+
+    <dl class="meta">
+      <div><dt>Role</dt><dd>Sole developer: requirements, data model, backend, frontend, tests and deployment</dd></div>
+      <div><dt>Timeline</dt><dd>Built August – September 2026; deployed in September, launching at the clinic soon</dd></div>
+      <div><dt>Stack</dt><dd>FastAPI (async), SQLAlchemy 2.0 with asyncpg, PostgreSQL, Alembic, Redis, Pydantic v2, Jinja2</dd></div>
+      <div><dt>Hosting</dt><dd>Docker on Render, PostgreSQL on Neon, Redis on Render Key Value</dd></div>
+    </dl>
+
+    <ul class="stats" aria-label="Clinic CRM in numbers">
+      <li><strong>86</strong><span>API endpoints</span></li>
+      <li><strong>158</strong><span>automated tests, all passing</span></li>
+      <li><strong>10</strong><span>database tables</span></li>
+      <li><strong>3</strong><span>user roles</span></li>
+    </ul>
+
+    <div class="demo-cta">
+      <div>
+        <p class="demo-cta-k">Live demo</p>
+        <h3>Use it yourself</h3>
+        <p>The real interface runs in your browser on sample data, in English or the original Uzbek. Sign in as the owner, a manager or an assistant, then add a receipt, void it, pay a salary or export a report.</p>
+      </div>
+      <a class="btn primary" href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Open the live demo <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <div class="shots">
+      <div class="tabs" role="tablist" aria-label="Clinic CRM screenshots">
+        <button class="tab" role="tab" id="tab-dash" aria-controls="shot-dash" aria-selected="true">Dashboard</button>
+        <button class="tab" role="tab" id="tab-doc" aria-controls="shot-doc" aria-selected="false" tabindex="-1">Per-doctor report</button>
+        <button class="tab" role="tab" id="tab-pay" aria-controls="shot-pay" aria-selected="false" tabindex="-1">Payroll</button>
+        <button class="tab" role="tab" id="tab-rec" aria-controls="shot-rec" aria-selected="false" tabindex="-1">Receipts</button>
+        <button class="tab" role="tab" id="tab-pha" aria-controls="shot-pha" aria-selected="false" tabindex="-1">Pharmacy</button>
+      </div>
+
+      <figure class="panel" role="tabpanel" id="shot-dash" aria-labelledby="tab-dash">
+        <div class="frame">
+          <div class="frame-bar"><span>/dashboard</span><span>Boshqaruv paneli</span></div>
+          <img src="img/dashboard.webp" width="1600" height="1178" alt="Clinic CRM dashboard for September 2026: the clinic's share, total income, doctors' share and expenses, income by department, and salary and expense totals with net figures.">
+        </div>
+        <figcaption>The clinic's position for any period, from gross income down to the figure left after salaries and expenses.</figcaption>
+      </figure>
+      <figure class="panel" role="tabpanel" id="shot-doc" aria-labelledby="tab-doc" hidden>
+        <div class="frame">
+          <div class="frame-bar"><span>/reports</span><span>Hisobotlar</span></div>
+          <img src="img/reports-by-doctor.webp" width="1600" height="1000" loading="lazy" alt="Per-doctor report for one surgeon: share from consultations, surgeries and room stays, the combined share, and a breakdown by department.">
+        </div>
+        <figcaption>One doctor's share across consultations, surgeries and room stays. Every report also exports to Excel.</figcaption>
+      </figure>
+      <figure class="panel" role="tabpanel" id="shot-pay" aria-labelledby="tab-pay" hidden>
+        <div class="frame">
+          <div class="frame-bar"><span>/salary-page</span><span>Oyliklar</span></div>
+          <img src="img/salaries.webp" width="1600" height="778" loading="lazy" alt="Payroll balance table listing each staff member's role, amount earned, amount paid and amount remaining for September 2026.">
+        </div>
+        <figcaption>Earned, paid and remaining for every staff member. The nurse hired mid-month is prorated automatically.</figcaption>
+      </figure>
+      <figure class="panel" role="tabpanel" id="shot-rec" aria-labelledby="tab-rec" hidden>
+        <div class="frame">
+          <div class="frame-bar"><span>/receipts</span><span>Kvitansiyalar</span></div>
+          <img src="img/receipts.webp" width="1600" height="1000" loading="lazy" alt="Receipt entry form for a new consultation above a filterable list of recent receipts with amounts, doctor's rate, deduction and shares.">
+        </div>
+        <figcaption>Receipt entry with a live calculation, above a list that filters by date, doctor and who entered the record.</figcaption>
+      </figure>
+      <figure class="panel" role="tabpanel" id="shot-pha" aria-labelledby="tab-pha" hidden>
+        <div class="frame">
+          <div class="frame-bar"><span>/pharmacy-page</span><span>Dorixona</span></div>
+          <img src="img/pharmacy.webp" width="1600" height="1000" loading="lazy" alt="Pharmacy ledger showing total medicine received, total paid and a negative running balance, with an entry form and dated ledger rows.">
+        </div>
+        <figcaption>A running ledger of medicine received against payments made, with the balance in green or red.</figcaption>
+      </figure>
+      <p class="arch-note">Screenshots use fictional demo data. The interface is in Uzbek, the clinic's working language; the live demo can also show it in English.</p>
+    </div>
+
+    <div class="block-gap">
+      <h3 class="block">The problem</h3>
+      <div class="prose">
+        <p>Every visit, surgery and room stay produces a paper receipt. At the end of the month someone works out in Excel what each doctor has earned from a different percentage of every receipt, what each nurse is owed on a prorated salary, how much has already been paid out as advances, and where the pharmacy account stands.</p>
+        <p>It is slow, easy to get wrong, and nobody can see the clinic's real position until the month is over.</p>
+      </div>
+    </div>
+
+    <div class="block-gap">
+      <h3 class="block">What it does</h3>
+      <ul class="modules">
+        <li><b>Receipts</b><em>Kvitansiyalar</em><p>Consultations, surgeries and room stays, with both shares calculated live while typing.</p></li>
+        <li><b>Dashboard</b><em>Boshqaruv paneli</em><p>Income, shares, expenses, salaries and net figures for any period.</p></li>
+        <li><b>Reports</b><em>Hisobotlar</em><p>By department and by doctor for any date range, exportable to Excel.</p></li>
+        <li><b>Payroll</b><em>Oyliklar</em><p>Earned, paid and remaining for each person, with advances and full payments by month.</p></li>
+        <li><b>Overtime</b><em>Navbatchilik</em><p>Duty shifts that add straight onto each person's earnings.</p></li>
+        <li><b>Pharmacy</b><em>Dorixona</em><p>Medicine received against payments made, as a running balance.</p></li>
+        <li><b>Expenses</b><em>Boshqa harajatlar</em><p>Utilities, supplies and repairs, searchable and totalled per period.</p></li>
+        <li><b>Staff and access</b><em>Ishchilar · Foydalanuvchilar</em><p>Staff records, three login roles, and voided records only the superadmin can restore or delete.</p></li>
+      </ul>
+    </div>
+
+    <div class="block-gap">
+      <h3 class="block">How it fits together</h3>
+      <div class="arch" role="group" aria-label="Architecture: the browser calls the FastAPI app, which reads and writes PostgreSQL and uses Redis.">
+        <div class="node">
+          <span class="node-k">Browser</span>
+          <p>Jinja2 pages and vanilla JavaScript, in Uzbek</p>
+        </div>
+        <div class="link">JSON · JWT</div>
+        <div class="node app">
+          <span class="node-k">FastAPI · Docker on Render</span>
+          <ol class="chain" aria-label="Request path inside the app">
+            <li><span>Routers</span></li>
+            <li><span>Role checks</span></li>
+            <li><span>Services</span></li>
+            <li><span>calculations.py</span></li>
+          </ol>
+          <p>Every module has the same layers. Money formulas live in plain functions with no framework imports, so each one is written once and tested on its own.</p>
+        </div>
+        <div class="link">async SQLAlchemy</div>
+        <div class="stores">
+          <div class="node">
+            <span class="node-k">PostgreSQL · Neon</span>
+            <p>10 tables, Alembic migrations, daily verified backups</p>
+          </div>
+          <div class="node">
+            <span class="node-k">Redis</span>
+            <p>Revoked-token blocklist and login rate limits</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-gap">
+      <h3 class="block">Engineering decisions</h3>
+      <ul class="decisions">
+        <li>
+          <h4>Money that adds up</h4>
+          <p>Amounts are whole soums stored as <code>Numeric(12,0)</code> and calculated with <code>Decimal</code>. Each receipt is rounded half-up before totals are summed, so a report always equals the sum of its receipts. The live preview in the browser uses exact <code>BigInt</code> arithmetic and was checked against the server over 4,013 cases.</p>
+        </li>
+        <li>
+          <h4>Dates in the clinic's time zone</h4>
+          <p>Reports filter on the day the service happened, from local midnight to local midnight. I found and fixed a bug where the browser converted "1st of the month" to UTC and pulled the previous day into every monthly figure.</p>
+        </li>
+        <li>
+          <h4>Payroll rules in code</h4>
+          <p>Doctors earn commission on their receipts. Nurses and staff earn a fixed salary prorated by working day, with Sundays excluded and nothing before their hire date. A full month always pays exactly the salary.</p>
+        </li>
+        <li>
+          <h4>Fixed an N+1 query</h4>
+          <p>The payroll balance ran five queries per staff member. It now runs five in total, and a test proves the batched and per-person versions return identical figures. I also added indexes shaped to the report queries.</p>
+        </li>
+        <li>
+          <h4>Access and security</h4>
+          <p>Three roles enforced on the server; assistants only ever see their own receipts. JWT access and refresh tokens with a Redis blocklist, all sessions revoked when a user is blocked or changes password, Argon2 hashing, rate-limited login, a strict Content-Security-Policy, escaped user input and a non-root container.</p>
+        </li>
+        <li>
+          <h4>Tested and operated</h4>
+          <p>158 tests run against real PostgreSQL and Redis, 65 of them over HTTP for authentication, roles and security. Daily <code>pg_dump</code> backups are checked with <code>pg_restore</code>, kept for 30 days plus every month-end, and a restore needs a typed confirmation.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="case-cta">
+      <a class="btn primary" href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Open the live demo <span aria-hidden="true">↗</span></a>
+      <a class="btn" href="https://github.com/Aminovich7/clinic-crm-showcase" target="_blank" rel="noopener">Full case study on GitHub <span aria-hidden="true">↗</span></a>
+      <p>The source code is private because the system was built for a real clinic. The live demo runs the real interface on sample data, and I'm happy to walk through the code, the data model and the tests in an interview.</p>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section class="section" id="projects">
+    <header class="sec-head">
+      <p class="eyebrow">More work</p>
+      <h2>Projects</h2>
+      <p class="sub">Grouped by framework, FastAPI first. Every project links to its code on GitHub.</p>
+    </header>
+
+    <div class="group">
+      <h3 class="group-title">FastAPI</h3>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/edugroup" target="_blank" rel="noopener">EduGroup</a></h4>
+          <p class="proj-when">Jul 2026</p>
+        </div>
+        <div class="proj-body">
+          <p>An online learning platform. Teachers run courses and groups with video lessons; students enrol, pay in full or by instalments, and only then unlock the lessons; managers approve profiles and payments; a superadmin sees system-wide reports.</p>
+          <ul class="points">
+            <li>When a group is full, students join a waitlist, and the next one moves up automatically when a seat frees.</li>
+            <li>Celery beat expires unpaid enrolments after 72 hours and flags overdue instalments every day.</li>
+            <li>Refresh tokens rotate on every use; replaying a revoked one signs the user out everywhere.</li>
+            <li>193 passing tests. Docker Compose runs the app, PostgreSQL, Redis, a Celery worker and beat.</li>
+          </ul>
+          <ul class="tags"><li>FastAPI</li><li>async SQLAlchemy</li><li>PostgreSQL</li><li>Alembic</li><li>Celery</li><li>Redis</li><li>Jinja2</li><li>pytest</li><li>Docker</li></ul>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/najot-talim/tree/main/fastapi-nt" target="_blank" rel="noopener">FastAPI course work</a></h4>
+          <p class="proj-when">Jun – Jul 2026</p>
+        </div>
+        <div class="proj-body">
+          <p>Nine homework projects: CRUD with SQLAlchemy, Alembic migrations, async SQLAlchemy, JWT authentication, pytest and Redis, then background processing with Celery and RabbitMQ.</p>
+          <ul class="tags"><li>FastAPI</li><li>SQLAlchemy</li><li>Alembic</li><li>JWT</li><li>pytest</li><li>Redis</li><li>Celery</li><li>RabbitMQ</li></ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="group">
+      <h3 class="group-title">Django REST Framework</h3>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/suhulat.uz" target="_blank" rel="noopener">Suhulat</a></h4>
+          <p class="proj-when">Jun 2026</p>
+        </div>
+        <div class="proj-body">
+          <p>A marketplace for goods sold by the kilogram, litre, box or ton. Sellers list goods; buyers either order directly or post a request for quotation that sellers answer with offers.</p>
+          <ul class="points">
+            <li>Orders move from pending to completed and can be cancelled while pending or confirmed.</li>
+            <li>Seller verification, plus an admin API for moderation and marketplace statistics.</li>
+            <li>JWT with a token blacklist, role-based permissions, throttling, OpenAPI docs and 19 tests.</li>
+          </ul>
+          <ul class="tags"><li>Django REST Framework</li><li>SimpleJWT</li><li>django-filter</li><li>drf-spectacular</li><li>PostgreSQL</li></ul>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/job-x" target="_blank" rel="noopener">Job-X</a></h4>
+          <p class="proj-when">Jun 2026</p>
+          <span class="badge">Team project</span>
+        </div>
+        <div class="proj-body">
+          <p>A freelance marketplace API in the style of Upwork. Clients post projects, freelancers bid, and an accepted bid becomes a contract that either side can cancel.</p>
+          <ul class="points">
+            <li>28 endpoints with JWT authentication, filtering and OpenAPI docs.</li>
+            <li>A Postman collection covering the whole API.</li>
+          </ul>
+          <ul class="tags"><li>Django REST Framework</li><li>SimpleJWT</li><li>django-filter</li><li>drf-spectacular</li><li>PostgreSQL</li><li>Postman</li></ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="group">
+      <h3 class="group-title">Django</h3>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/smart-city" target="_blank" rel="noopener">Smart City</a></h4>
+          <p class="proj-when">May 2026</p>
+          <span class="badge">Team project</span>
+        </div>
+        <div class="proj-body">
+          <p>Incident reporting for city services with four roles. Citizens report problems with photos, operators triage and assign them, technicians resolve them with evidence, and citizens confirm or reject the fix. Unconfirmed incidents close themselves after seven days.</p>
+          <ul class="tags"><li>Django</li><li>Class-based views</li><li>Custom user model</li><li>Role-based access</li></ul>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/project-x" target="_blank" rel="noopener">Clinic management</a></h4>
+          <p class="proj-when">Jul 2026</p>
+        </div>
+        <div class="proj-body">
+          <p>An earlier Django version of the clinic finance system: doctors, consultations, surgeries and room stays, with doctor-share and profit reports for any date range. Runs in Docker.</p>
+          <ul class="tags"><li>Django</li><li>Class-based views</li><li>Docker</li></ul>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/mini-online-shop" target="_blank" rel="noopener">Mini Online Shop</a></h4>
+          <p class="proj-when">May 2026</p>
+        </div>
+        <div class="proj-body">
+          <p>An online shop with separate buyer and seller accounts, a cart with percentage promo codes, checkout and order history.</p>
+          <ul class="tags"><li>Django</li><li>Class-based views</li><li>Custom management commands</li></ul>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <h4><a class="ext" href="https://github.com/Aminovich7/najot-talim" target="_blank" rel="noopener">Najot Ta'lim course work</a></h4>
+          <p class="proj-when">Mar – Jul 2026</p>
+        </div>
+        <div class="proj-body">
+          <p>Homework and exam projects from my Python backend course at Najot Ta'lim, one folder each, covering Django, Django REST Framework and FastAPI.</p>
+          <ul class="tags"><li>Django</li><li>Django REST Framework</li><li>FastAPI</li></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== PATH ===================== -->
+  <section class="section" id="path">
+    <header class="sec-head">
+      <p class="eyebrow">Path</p>
+      <h2>From first Django project to a deployed system</h2>
+      <p class="sub">Dated by the commits on my GitHub.</p>
+    </header>
+    <ol class="path">
+      <li><time datetime="2026-03">Mar 2026</time><div><b>Django foundations</b><p>Models and the ORM, views, templates and forms. First projects: a pharmacy inventory, a book catalogue and an online shop.</p></div></li>
+      <li><time datetime="2026-04">Apr 2026</time><div><b>Class-based views, authentication, first REST APIs</b><p>Custom user models, sign-up and login, then my first APIs with Django REST Framework.</p></div></li>
+      <li><time datetime="2026-05">May 2026</time><div><b>Token and JWT auth, a team project</b><p>Permissions and OpenAPI docs in DRF. Built Smart City with teammates.</p></div></li>
+      <li><time datetime="2026-06">Jun 2026</time><div><b>Started FastAPI</b><p>Finished the DRF exam project, an e-commerce API. Built Job-X with a teammate and the Suhulat marketplace.</p></div></li>
+      <li><time datetime="2026-07">Jul 2026</time><div><b>Async, testing and background jobs</b><p>Async SQLAlchemy, pytest, Redis, Celery and RabbitMQ. Built EduGroup.</p></div></li>
+      <li class="now"><time datetime="2026-08">Aug – Sep 2026</time><div><b>Clinic CRM deployed</b><p>Built a clinic's finance and payroll system with FastAPI and deployed it.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section class="section" id="skills">
+    <header class="sec-head">
+      <p class="eyebrow">Skills</p>
+      <h2>What I work with</h2>
+    </header>
+    <dl class="skills">
+      <div><dt>Languages</dt><dd>Python, SQL</dd></div>
+      <div><dt>Frameworks</dt><dd>FastAPI, Django, Django REST Framework, Pydantic, Jinja2</dd></div>
+      <div><dt>Data</dt><dd>PostgreSQL, SQLAlchemy 2.0 (sync and async), Django ORM, Alembic</dd></div>
+      <div><dt>Async and jobs</dt><dd>asyncio, Celery, Redis, RabbitMQ</dd></div>
+      <div><dt>Auth and security</dt><dd>JWT access and refresh tokens, token revocation, OAuth2 password flow, Argon2 and bcrypt, role-based access, rate limiting, CSP and security headers</dd></div>
+      <div><dt>Testing</dt><dd>pytest, pytest-asyncio, httpx, Django test framework</dd></div>
+      <div><dt>Deployment</dt><dd>Docker, Docker Compose, Render, Neon, Git</dd></div>
+      <div><dt>API tooling</dt><dd>OpenAPI and Swagger, drf-spectacular, Postman</dd></div>
+    </dl>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section class="section contact" id="contact">
+    <p class="eyebrow">Contact</p>
+    <h2 style="margin-top:1rem">Let's talk.</h2>
+    <p class="sub">I'm open to backend developer roles. The quickest way to reach me is Telegram or email.</p>
+    <ul class="channels">
+      <li>
+        <span class="k">Email</span>
+        <span class="v" id="email">m.aminovich7@gmail.com</span>
+        <button class="copy" type="button" id="copy-email" data-copy="m.aminovich7@gmail.com" data-target="email">Copy</button>
+      </li>
+      <li>
+        <span class="k">Telegram</span>
+        <a class="v" href="https://t.me/Aminovich7" target="_blank" rel="noopener">@aminovich7</a>
+        <span aria-hidden="true"></span>
+      </li>
+      <li>
+        <span class="k">GitHub</span>
+        <a class="v" href="https://github.com/Aminovich7" target="_blank" rel="noopener">github.com/Aminovich7</a>
+        <span aria-hidden="true"></span>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    <span>Mukhammad Batoshev · Tashkent, 2026</span>
+    <span>Clinic CRM screenshots use fictional demo data</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Screenshot tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i, false); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); select((i + 1) % tabs.length, true); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); select((i - 1 + tabs.length) % tabs.length, true); }
+    });
+  });
+
+  // Copy email
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var reset = function () { setTimeout(function () { btn.textContent = 'Copy'; }, 2000); };
+      var fallback = function () {
+        var el = document.getElementById(btn.getAttribute('data-target'));
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.textContent = 'Selected';
+        reset();
+      };
+      try {
+        navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(function () {
+          btn.textContent = 'Copied';
+          reset();
+        }, fallback);
+      } catch (e) { fallback(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>

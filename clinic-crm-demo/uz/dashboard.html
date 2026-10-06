@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="uz" data-demo-lang="uz">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boshqaruv paneli — Klinika CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Klinika CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Asosiy menyu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Chiqish</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Boshqaruv paneli</h1>
+
+<div class="card">
+  <form class="inline-form" id="range-form">
+    <div class="field">
+      <label for="date_from">Dan</label>
+      <input type="date" id="date_from">
+    </div>
+    <div class="field">
+      <label for="date_to">Gacha</label>
+      <input type="date" id="date_to">
+    </div>
+    <button type="submit">Yangilash</button>
+    <button type="button" class="secondary" id="current-month-btn">Joriy oy</button>
+    <button type="button" class="secondary" id="previous-month-btn">O'tgan oy</button>
+    <button type="button" class="secondary" id="last-week-btn">O'tgan hafta</button>
+    <button type="button" class="secondary" id="filter-clear-btn">Tozalash</button>
+  </form>
+  <p class="muted" id="period-label"></p>
+</div>
+
+<div id="error-container"></div>
+
+<div class="grid" id="hero-card"></div>
+<div class="grid" id="summary-cards"></div>
+
+<h2>Bo'limlar bo'yicha</h2>
+<div class="grid" id="section-cards"></div>
+
+<h2>Ish haqi va harajatlar</h2>
+<div class="grid grid--quad" id="payroll-expense-cards"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/dashboard.js?v=1"></script>
+
+</body>
+</html>

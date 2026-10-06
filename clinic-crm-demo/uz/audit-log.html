@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="uz" data-demo-lang="uz">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Audit jurnali — Klinika CRM</title>
+  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+</head>
+<body class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">Klinika CRM</div>
+    <nav class="mainnav" id="mainnav" aria-label="Asosiy menyu"></nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <h1 class="page-title" id="page-title"></h1>
+      <div class="user-info">
+        <span id="current-user-name"></span>
+        <button id="logout-btn" class="secondary">Chiqish</button>
+      </div>
+    </header>
+    <main class="container">
+      
+<h1>Audit jurnali</h1>
+
+<div id="error-container"></div>
+<div id="success-container"></div>
+
+<p class="muted">
+  Bu yerda barcha bekor qilingan yozuvlar ko'rsatiladi. "Tiklash" yozuvni
+  qaytaradi va u yana hisobotlarga qo'shiladi. "O'chirish" yozuvni butunlay
+  o'chiradi — bu amalni qaytarib bo'lmaydi va yozuv ma'lumotlari hech qayerda
+  saqlanmaydi. "Barchasini o'chirish" ro'yxatdagi barcha yozuvlarni (tanlangan
+  tur bo'yicha) bir yo'la butunlay o'chiradi.
+</p>
+
+<div class="card">
+  <form class="inline-form" id="voided-filter-form">
+    <div class="field">
+      <label for="voided_resource_type">Turi</label>
+      <select id="voided_resource_type"></select>
+    </div>
+    <button type="submit">Filtrlash</button>
+    <button type="button" class="danger" id="delete-all-btn" disabled>Barchasini o'chirish</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Turi</th>
+        <th>Tavsif</th>
+        <th>Sana</th>
+        <th class="num">Summa</th>
+        <th>Bekor qilingan</th>
+        <th>Kim bekor qildi</th>
+        <th>Amallar</th>
+      </tr>
+    </thead>
+    <tbody id="voided-tbody"></tbody>
+  </table>
+</div>
+<div class="pagination" id="voided-pagination"></div>
+
+    </main>
+  </div>
+
+  <script src="static/demo/crm-mock.js?v=1"></script>
+  <script src="static/demo/demo.js?v=1"></script>
+  <script src="static/js/api.js?v=1"></script>
+  <script src="static/js/auth.js?v=1"></script>
+  <script src="static/js/nav.js?v=1"></script>
+  
+<script src="static/js/audit_log.js?v=1"></script>
+
+</body>
+</html>
