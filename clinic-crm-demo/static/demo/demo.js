@@ -8,7 +8,8 @@
   "use strict";
 
   const LANG = document.documentElement.getAttribute("data-demo-lang") === "uz" ? "uz" : "en";
-  const STATE_KEY = "klinika-crm-demo:state:v1";
+  const STATE_KEY = "klinika-crm-demo:state:v2";
+  const OLD_STATE_KEYS = ["klinika-crm-demo:state:v1"];
   const LANG_KEY = "klinika-crm-demo:lang";
   const PORTFOLIO_URL = "https://aminovich7.github.io/";
   const REPO_URL = "https://github.com/Aminovich7/clinic-crm-showcase";
@@ -40,6 +41,7 @@
     try { Object.defineProperty(window, "localStorage", { value: store, configurable: true }); } catch (err) { /* ignore */ }
   }
   try { store.setItem(LANG_KEY, LANG); } catch (e) { /* ignore */ }
+  try { OLD_STATE_KEYS.forEach((k) => store.removeItem(k)); } catch (e) { /* ignore */ }
 
   // -------------------------------------------------------------- state
   const tashToday = () => new Date(Date.now() + 5 * 3600000).toISOString().slice(0, 10);

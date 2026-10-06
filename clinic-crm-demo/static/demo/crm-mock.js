@@ -1647,12 +1647,17 @@
         const korik = rng() < 0.75;
         events.push({ kind: "consultation", t: at(d, h, m), h, doc, korik, amount: korik ? pick(PRICE[doc]) : pick([80000, 100000]) });
       }
-      if (rng() < 0.3) {
-        const h = 10 + Math.floor(rng() * 4);
-        const amount = pick([3500000, 4800000, 6200000, 7500000, 9000000]);
-        events.push({ kind: "surgery", t: at(d, h, 0), h, amount, expense: Math.floor((amount * pick([0.18, 0.22, 0.25])) / 1000) * 1000 });
+      // General surgery (Toshmatov) on Mon, Tue, Thu and Sat; ENT surgery
+      // (Sobirov) on Wed and Fri.
+      const surgeon = [1, 2, 4, 6].includes(weekday(d)) ? 3 : 5;
+      const surgeries = rng() < (surgeon === 3 ? 0.95 : 0.85) ? (rng() < 0.3 ? 2 : 1) : 0;
+      for (let i = 0; i < surgeries; i++) {
+        const h = 9 + Math.floor(rng() * 6);
+        const amount = surgeon === 3 ? pick([4500000, 5800000, 6500000, 7800000, 9500000, 12000000]) : pick([2800000, 3500000, 4200000, 5000000]);
+        const rate = surgeon === 3 ? pick([0.15, 0.18, 0.2]) : pick([0.12, 0.15]);
+        events.push({ kind: "surgery", t: at(d, h, pick([0, 30])), h, amount, expense: Math.floor((amount * rate) / 1000) * 1000, doc: surgeon, pct: surgeon === 3 ? "35.00" : "30.00" });
       }
-      const rooms = rng() < 0.55 ? (rng() < 0.3 ? 2 : 1) : 0;
+      const rooms = rng() < 0.7 ? (rng() < 0.35 ? 2 : 1) : 0;
       for (let i = 0; i < rooms; i++) {
         const h = 12 + Math.floor(rng() * 4);
         events.push({ kind: "room", t: at(d, h, pick([0, 30])), h, amount: pick([400000, 500000, 650000]), doc: 1 + Math.floor(rng() * 5), noReceipt: rng() < 0.15 });
@@ -1664,7 +1669,7 @@
         if (e.kind === "consultation") {
           add("consultations", { type: e.korik ? "korik" : "qaytakorik", receipt_number: ++receipt, date: e.t, amount: String(e.amount), doctor_percent: PCT[e.doc], minus_beshming: "5000", doctor_id: e.doc, ...base(e.t, by) });
         } else if (e.kind === "surgery") {
-          add("surgeries", { receipt_number: ++receipt, date: e.t, amount: String(e.amount), surgery_expense: String(e.expense), doctor_percent: "35.00", doctor_id: 3, ...base(e.t, by) });
+          add("surgeries", { receipt_number: ++receipt, date: e.t, amount: String(e.amount), surgery_expense: String(e.expense), doctor_percent: e.pct, doctor_id: e.doc, ...base(e.t, by) });
         } else {
           add("rooms", { receipt_number: e.noReceipt ? null : ++receipt, date: e.t, amount: String(e.amount), doctor_percent: "10.00", doctor_id: e.doc, ...base(e.t, by) });
         }
@@ -1709,14 +1714,14 @@
     const expenseEvents = [];
     for (const [y, m] of months) {
       const ym = `${y}-${pad(m)}`;
-      expenseEvents.push([firstWorkingDayFrom(`${ym}-01`), 10, "Bino ijarasi", 8000000]);
+      expenseEvents.push([firstWorkingDayFrom(`${ym}-08`), 10, "Bino ijarasi", 8000000]);
       const fifth = firstWorkingDayFrom(`${ym}-05`);
       expenseEvents.push([fifth, 15, "Kommunal to'lovlar", pick([1650000, 1780000, 1920000])]);
       expenseEvents.push([fifth, 15, "Internet va telefon", 420000]);
       const count = 3 + Math.floor(rng() * 3);
       for (let i = 0; i < count; i++) {
         const [title, amounts] = pick(oneOffs);
-        const day = firstWorkingDayFrom(`${ym}-${pad(2 + Math.floor(rng() * 26))}`);
+        const day = firstWorkingDayFrom(`${ym}-${pad(8 + Math.floor(rng() * 20))}`);
         expenseEvents.push([day, 14, title, pick(amounts)]);
       }
     }
@@ -1742,37 +1747,58 @@
     voidOne("expenses", Math.floor(state.expenses.length * 0.5));
     voidOne("duty_entries", Math.floor(state.duty_entries.length * 0.6));
 
-    // Salaries: an advance on the 15th, and the rest of the month paid on the
-    // 3rd working day of the next month (computed with the payroll rules, so
-    // paid months settle to zero). The latest month leaves two people unpaid.
-    const ADVANCE = { 1: 1500000, 2: 1500000, 3: 2000000, 4: 1500000, 5: 1500000, 6: 1700000, 7: 1500000, 8: 1300000, 9: 1600000 };
+    // Salaries. Doctors are paid their commission every Saturday evening for
+    // that week's receipts (split at a month boundary, because a payment
+    // belongs to one month). Nurses and other staff get an advance on the
+    // 15th and the rest on the month's last working day. Last month leaves
+    // two people with money still owed, so the balance page shows it.
+    const ADVANCE = { 6: 1700000, 7: 1500000, 8: 1300000, 9: 1600000 };
+    const monthOf = (d) => {
+      const [y, m] = d.split("-").map(Number);
+      return [`${y}-${pad(m)}-01`, `${y}-${pad(m)}-${pad(daysInMonth(y, m))}`];
+    };
+    const lastWorkingDayOf = (monthEnd) => {
+      let d = monthEnd;
+      while (weekday(d) === 0) d = addDays(d, -1);
+      return d;
+    };
     const payEvents = [];
+    let saturday = start;
+    while (weekday(saturday) !== 6) saturday = addDays(saturday, 1);
+    for (; saturday <= today; saturday = addDays(saturday, 7)) {
+      const weekStart = addDays(saturday, -6) < start ? start : addDays(saturday, -6);
+      const [, firstMonthEnd] = monthOf(weekStart);
+      const segments = firstMonthEnd < saturday ? [[weekStart, firstMonthEnd], [monthOf(saturday)[0], saturday]] : [[weekStart, saturday]];
+      for (const s of state.staff) {
+        if (s.role !== "doctor" || s.status !== "active") continue;
+        if (s.id === 5 && saturday.slice(0, 7) === prevMonth && saturday > `${prevMonth}-15`) continue;
+        // Days of a week that fall in the previous month are settled with
+        // that month, on its last working day.
+        for (const [from, to] of segments) {
+          const sameMonth = from.slice(0, 7) === saturday.slice(0, 7);
+          const payDay = sameMonth ? saturday : lastWorkingDayOf(to);
+          payEvents.push({ t: at(payDay, 18, 0), staff: s.id, type: "full", earned: [from, to], period: monthOf(from) });
+        }
+      }
+    }
     for (const [y, m] of months) {
       const ym = `${y}-${pad(m)}`;
-      const monthStart = `${ym}-01`;
-      const monthEnd = `${ym}-${pad(daysInMonth(y, m))}`;
+      const period = monthOf(`${ym}-01`);
       const advanceDay = firstWorkingDayFrom(`${ym}-15`);
+      const payDay = lastWorkingDayOf(period[1]);
       for (const s of state.staff) {
-        if (s.status !== "active" || s.hire_date > `${ym}-14`) continue;
-        payEvents.push({ t: at(advanceDay, 17, 0), staff: s.id, type: "avans", amount: ADVANCE[s.id], period: [monthStart, monthEnd] });
-      }
-      let payDay = addDays(monthEnd, 1);
-      for (let k = 0; k < 2 || weekday(payDay) === 0; ) { payDay = addDays(payDay, 1); if (weekday(payDay) !== 0) k++; }
-      for (const s of state.staff) {
-        if (s.status !== "active" || s.hire_date > monthEnd) continue;
-        if (ym === prevMonth && (s.id === 5 || s.id === 9)) continue;
-        payEvents.push({ t: at(payDay, 17, 30), staff: s.id, type: "full", amount: null, period: [monthStart, monthEnd] });
+        if (s.role === "doctor" || s.status !== "active") continue;
+        if (s.hire_date <= `${ym}-14`) payEvents.push({ t: at(advanceDay, 17, 0), staff: s.id, type: "avans", amount: ADVANCE[s.id], period });
+        if (s.hire_date <= period[1] && !(ym === prevMonth && s.id === 9)) payEvents.push({ t: at(payDay, 17, 30), staff: s.id, type: "full", remaining: true, period });
       }
     }
     payEvents.sort((a, b) => a.t - b.t || (a.type === b.type ? a.staff - b.staff : a.type === "avans" ? -1 : 1));
     for (const p of payEvents) {
       if (p.t > nowMs) continue;
       let amount = p.amount;
-      if (amount == null) {
-        const [row] = staffBalance(state, p.period[0], p.period[1], p.staff, p.t);
-        amount = Number(row.remaining);
-        if (amount <= 0) continue;
-      }
+      if (p.earned) amount = Number(staffBalance(state, p.earned[0], p.earned[1], p.staff, p.t)[0].earned);
+      else if (p.remaining) amount = Number(staffBalance(state, p.period[0], p.period[1], p.staff, p.t)[0].remaining);
+      if (!(amount > 0)) continue;
       add("salary_payments", { staff_id: p.staff, paid_at: p.t, period_start: p.period[0], period_end: p.period[1], payment_type: p.type, amount: String(amount), ...base(p.t, A.manager.id) });
     }
 
