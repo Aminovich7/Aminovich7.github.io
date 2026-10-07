@@ -3,6 +3,7 @@
 Portfolio of **Mukhammad Batoshev**, Python backend developer (FastAPI, Django REST Framework).
 
 - **Portfolio:** https://aminovich7.github.io/
+- **LinkedIn:** https://www.linkedin.com/in/mukhammad-batoshev
 - **Clinic CRM live demo:** https://aminovich7.github.io/clinic-crm-demo/ — the real interface of a clinic finance and payroll system built with FastAPI, running in the browser on fictional sample data (English, or the original Uzbek under `/uz/`).
 
 ## About the demo
