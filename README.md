@@ -1,6 +1,6 @@
 # aminovich7.github.io
 
-Portfolio of **Mukhammad Batoshev**, Python backend developer (FastAPI, Django REST Framework).
+Portfolio of **Mukhammad Batoshev**, backend engineer (Python, FastAPI, Django REST Framework).
 
 - **Portfolio:** https://aminovich7.github.io/
 - **LinkedIn:** https://www.linkedin.com/in/mukhammad-batoshev
