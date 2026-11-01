@@ -91,16 +91,15 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .logo {
-  display: inline-flex;
-  align-items: center;
-  gap: .55rem;
-  font-family: var(--f-mono);
-  font-size: .875rem;
+  font-family: var(--f-display);
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   text-decoration: none;
   white-space: nowrap;
 }
-.logo b { font-weight: 600; }
-.logo span { color: var(--dim); }
+.logo .stop { color: var(--accent); }
+.logo:hover .stop { color: var(--ink); }
 
 .dot {
   width: 7px;
