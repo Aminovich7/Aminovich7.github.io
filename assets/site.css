@@ -510,3 +510,11 @@ img { max-width: 100%; height: auto; display: block; }
 
 button.chip { margin-left: .5rem; background: transparent; font: inherit; font-family: var(--f-mono); font-size: .7rem; cursor: pointer; vertical-align: middle; }
 button.chip:hover { color: var(--ink); border-color: var(--muted); }
+
+/* The whole card links to the case study; buttons inside sit above that link. */
+.project__cover { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.project__actions { position: relative; z-index: 2; display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+.project__more { text-decoration: none; }
+.project__more:hover { color: var(--accent); }
+.btn--sm { padding: .55rem 1rem; font-size: .875rem; }
+.hero__lead { max-width: 40rem; }

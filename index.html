@@ -26,7 +26,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="index.html#top" aria-label="Mukhammad Batoshev, home page">Mukhammad Batoshev<span class="stop">.</span></a>
+    <a class="logo" href="index.html#top" aria-label="Mukhammad Batoshev, home page">Mukhammad<span class="stop">.</span></a>
     <nav class="nav" aria-label="Sections">
       <a href="index.html#work">Work</a>
       <a href="index.html#before">Before software</a>
@@ -46,10 +46,10 @@
       </div>
       <h1>Mukhammad<br><span class="second">Batoshev</span><span class="stop">.</span></h1>
       <div class="hero__row">
-        <p class="hero__lead"><strong>Backend Engineer.</strong> I build APIs and business systems with Python, FastAPI and Django REST Framework, after seven years in operations working with systems like them.</p>
+        <p class="hero__lead"><strong>Backend Engineer</strong> building web systems end to end, from the API and database to the screens people use. Sole developer of a deployed clinic finance and payroll platform: 86 API endpoints, 166 automated tests and money that reconciles to the so'm. Before that, 7+ years in operations, dispatching 2,150+ vehicles and $3M+ in revenue, so I build software the way operations teams actually work.</p>
         <div class="hero__actions">
           <a class="btn btn--accent" href="#work">View selected work <span class="arrow" aria-hidden="true">→</span></a>
-          <a class="btn" href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Try the live demo <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="btn" href="#contact">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
       <div class="stats">
@@ -69,61 +69,66 @@
       <h2>Systems for money, learning and cities, <span class="soft">built to be used.</span></h2>
       <p class="section__intro">My main project is a deployed finance system for a private clinic. The others show the same habits in Django and DRF. Every screenshot uses fictional data.</p>
       <div class="projects">
-      <a class="project reveal" href="work/clinic-crm.html">
-        <div class="project__shot"><img src="img/clinic/dashboard.webp" alt="Clinic CRM dashboard: income, clinic share, net remainder, a money-flow bar and a statement" width="1440" height="900" loading="lazy"></div>
+      <article class="project reveal">
+        <a class="project__cover" href="work/clinic-crm.html" aria-label="Clinic CRM case study"></a>
+        <div class="project__shot"><img src="img/clinic/dashboard.webp" alt="Clinic CRM dashboard: income, clinic share, net remainder, a money-flow bar and a statement" width="1600" height="1000" loading="lazy"></div>
         <div class="project__body">
           <div class="project__top"><span class="project__num">01</span><span class="status">Deployed</span></div>
           <h3>Clinic CRM</h3>
           <p class="project__role">Sole developer · Aug 2026 – Nov 2026</p>
           <p class="project__desc">A finance and payroll system for a private clinic: receipts, doctors' commissions, salaries, the pharmacy account and expenses, with a dashboard that shows where every so'm went.</p>
           <ul class="project__facts"><li>86 <span>API endpoints</span></li><li>166 <span>tests</span></li><li>3 <span>user roles</span></li></ul>
-          <div class="project__foot"><ul class="chips"><li class="chip">FastAPI</li><li class="chip">SQLAlchemy 2.0 async</li><li class="chip">PostgreSQL</li><li class="chip">Alembic</li></ul><span class="project__more">Case study <span class="arrow" aria-hidden="true">→</span></span></div>
+          <div class="project__foot"><ul class="chips"><li class="chip">FastAPI</li><li class="chip">SQLAlchemy 2.0 async</li><li class="chip">PostgreSQL</li><li class="chip">Alembic</li></ul><div class="project__actions"><a class="btn btn--accent btn--sm" href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Try the live demo <span class="arrow" aria-hidden="true">↗</span></a><a class="project__more" href="work/clinic-crm.html">Case study <span class="arrow" aria-hidden="true">→</span></a></div></div>
         </div>
-      </a>
-      <a class="project reveal" href="work/edugroup.html">
-        <div class="project__shot"><img src="img/edugroup/card.webp" alt="EduGroup superadmin panel with platform totals and an income report by group" width="1440" height="900" loading="lazy"></div>
+      </article>
+      <article class="project reveal">
+        <a class="project__cover" href="work/edugroup.html" aria-label="EduGroup case study"></a>
+        <div class="project__shot"><img src="img/edugroup/superadmin.webp" alt="EduGroup superadmin panel with platform totals and an income report by group" width="1600" height="1000" loading="lazy"></div>
         <div class="project__body">
           <div class="project__top"><span class="project__num">02</span><span class="status">Open source</span></div>
           <h3>EduGroup</h3>
           <p class="project__role">Spec, review and testing · Jul 2026</p>
           <p class="project__desc">An online learning platform with four roles, a self-promoting waitlist, instalment payments and background jobs that keep enrolments honest.</p>
           <ul class="project__facts"><li>193 <span>tests</span></li><li>4 <span>roles</span></li><li>5 <span>Docker services</span></li></ul>
-          <div class="project__foot"><ul class="chips"><li class="chip">FastAPI</li><li class="chip">async SQLAlchemy</li><li class="chip">PostgreSQL</li><li class="chip">Celery</li></ul><span class="project__more">Case study <span class="arrow" aria-hidden="true">→</span></span></div>
+          <div class="project__foot"><ul class="chips"><li class="chip">FastAPI</li><li class="chip">async SQLAlchemy</li><li class="chip">PostgreSQL</li><li class="chip">Celery</li></ul><div class="project__actions"><a class="project__more" href="work/edugroup.html">Case study <span class="arrow" aria-hidden="true">→</span></a></div></div>
         </div>
-      </a>
-      <a class="project reveal" href="work/suhulat.html">
-        <div class="project__shot"><img src="img/suhulat/api-docs.webp" alt="Suhulat API documentation in Swagger UI" width="1440" height="900" loading="lazy"></div>
+      </article>
+      <article class="project reveal">
+        <a class="project__cover" href="work/suhulat.html" aria-label="Suhulat case study"></a>
+        <div class="project__shot"><img src="img/suhulat/home.webp" alt="Suhulat marketplace: listings with prices, sellers and regions" width="1600" height="1000" loading="lazy"></div>
         <div class="project__body">
           <div class="project__top"><span class="project__num">03</span><span class="status">Open source</span></div>
           <h3>Suhulat</h3>
           <p class="project__role">Backend developer · Jun 2026</p>
           <p class="project__desc">A marketplace API for goods sold by the kilogram, litre or box: listings, requests for quotation, offers, orders and an admin moderation API.</p>
           <ul class="project__facts"><li>19 <span>tests</span></li><li>JWT <span>with blacklist</span></li><li>OpenAPI <span>docs</span></li></ul>
-          <div class="project__foot"><ul class="chips"><li class="chip">Django REST Framework</li><li class="chip">SimpleJWT</li><li class="chip">django-filter</li><li class="chip">drf-spectacular</li></ul><span class="project__more">Case study <span class="arrow" aria-hidden="true">→</span></span></div>
+          <div class="project__foot"><ul class="chips"><li class="chip">Django REST Framework</li><li class="chip">SimpleJWT</li><li class="chip">django-filter</li><li class="chip">drf-spectacular</li></ul><div class="project__actions"><a class="project__more" href="work/suhulat.html">Case study <span class="arrow" aria-hidden="true">→</span></a></div></div>
         </div>
-      </a>
-      <a class="project reveal" href="work/smart-city.html">
-        <div class="project__shot"><img src="img/smartcity/card.webp" alt="Smart City operator panel with free technicians and the status workflow" width="1440" height="900" loading="lazy"></div>
+      </article>
+      <article class="project reveal">
+        <a class="project__cover" href="work/smart-city.html" aria-label="Smart City case study"></a>
+        <div class="project__shot"><img src="img/smartcity/operator.webp" alt="Smart City operator panel with free technicians and the status workflow" width="1600" height="1000" loading="lazy"></div>
         <div class="project__body">
           <div class="project__top"><span class="project__num">04</span><span class="status status--team">Team project</span></div>
           <h3>Smart City</h3>
           <p class="project__role">Team project · May 2026</p>
           <p class="project__desc">Incident reporting for city services. Citizens report problems, operators assign them, technicians fix them, and unconfirmed fixes close themselves after seven days.</p>
           <ul class="project__facts"><li>4 <span>roles</span></li><li>7-day <span>auto-close</span></li><li>Django <span>server-rendered</span></li></ul>
-          <div class="project__foot"><ul class="chips"><li class="chip">Django</li><li class="chip">Class-based views</li><li class="chip">Custom user model</li><li class="chip">Role-based access</li></ul><span class="project__more">Case study <span class="arrow" aria-hidden="true">→</span></span></div>
+          <div class="project__foot"><ul class="chips"><li class="chip">Django</li><li class="chip">Class-based views</li><li class="chip">Custom user model</li><li class="chip">Role-based access</li></ul><div class="project__actions"><a class="project__more" href="work/smart-city.html">Case study <span class="arrow" aria-hidden="true">→</span></a></div></div>
         </div>
-      </a>
-      <a class="project reveal" href="work/job-x.html">
-        <div class="project__shot"><img src="img/jobx/api-docs.webp" alt="Job-X API documentation in Swagger UI" width="1440" height="900" loading="lazy"></div>
+      </article>
+      <article class="project reveal">
+        <a class="project__cover" href="work/job-x.html" aria-label="Job-X case study"></a>
+        <div class="project__shot"><img src="img/jobx/api.webp" alt="Job-X API: a filtered project list request and its JSON response" width="1600" height="1000" loading="lazy"></div>
         <div class="project__body">
           <div class="project__top"><span class="project__num">05</span><span class="status status--team">Team project</span></div>
           <h3>Job-X</h3>
           <p class="project__role">Team project · Jun 2026</p>
           <p class="project__desc">A freelance marketplace API in the style of Upwork: clients post projects, freelancers bid, and an accepted bid becomes a contract.</p>
           <ul class="project__facts"><li>JWT <span>auth</span></li><li>Postman <span>collection</span></li><li>OpenAPI <span>docs</span></li></ul>
-          <div class="project__foot"><ul class="chips"><li class="chip">Django REST Framework</li><li class="chip">SimpleJWT</li><li class="chip">django-filter</li><li class="chip">drf-spectacular</li></ul><span class="project__more">Case study <span class="arrow" aria-hidden="true">→</span></span></div>
+          <div class="project__foot"><ul class="chips"><li class="chip">Django REST Framework</li><li class="chip">SimpleJWT</li><li class="chip">django-filter</li><li class="chip">drf-spectacular</li></ul><div class="project__actions"><a class="project__more" href="work/job-x.html">Case study <span class="arrow" aria-hidden="true">→</span></a></div></div>
         </div>
-      </a>
+      </article>
       </div>
 
       <div class="rows">
