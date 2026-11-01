@@ -599,6 +599,43 @@
     };
   }
 
+  // app/finance/reports.py build_trend_report: income per department and
+  // clinic share per Tashkent day (or month), summed from the same
+  // per-receipt totals, so the points always add up to totalReport().
+  function trendReport(state, from, to, groupBy) {
+    const r = businessRange(from, to);
+    const buckets = new Map();
+    const add = (ms, dept, t) => {
+      const day = tashDate(ms);
+      const key = groupBy === "month" ? day.slice(0, 8) + "01" : day;
+      const b = buckets.get(key) || { consultation: 0n, surgery: 0n, room: 0n, clinic_profit: 0n };
+      b[dept] += t.income;
+      b.clinic_profit += t.clinic_profit;
+      buckets.set(key, b);
+    };
+    for (const c of state.consultations) {
+      if (!c.is_voided && inRange(c.date, r)) add(c.date, "consultation", consultationTotals(c.amount, c.minus_beshming, c.doctor_percent));
+    }
+    for (const s of state.surgeries) {
+      if (!s.is_voided && inRange(s.date, r)) add(s.date, "surgery", surgeryTotals(s.amount, s.surgery_expense, s.doctor_percent));
+    }
+    for (const m of state.rooms) {
+      if (!m.is_voided && inRange(m.date, r)) add(m.date, "room", roomTotals(m.amount, m.doctor_percent));
+    }
+    const points = [...buckets.keys()].sort().map((period) => {
+      const b = buckets.get(period);
+      return {
+        period,
+        consultation_income: b.consultation.toString(),
+        surgery_income: b.surgery.toString(),
+        room_income: b.room.toString(),
+        total_income: (b.consultation + b.surgery + b.room).toString(),
+        clinic_profit: b.clinic_profit.toString(),
+      };
+    });
+    return { group_by: groupBy, points };
+  }
+
   // ------------------------------------------------------------- xlsx
   // A minimal .xlsx (zip, stored) with the same Field/Value layout as the
   // server's openpyxl export.
@@ -1393,6 +1430,10 @@
       reportRoute("surgeries", MANAGE, surgeryReport),
       reportRoute("rooms", MANAGE, roomReport),
       reportRoute("total", ALL, totalReport),
+      ["GET", "/reports/trend", MANAGE, (c) => {
+        const q = validateQuery({ ...DATE_RANGE, group_by: { type: "enum", values: ["day", "month"], default: "day" } }, c.query);
+        return valueErrTo422(() => trendReport(state, q.date_from, q.date_to, q.group_by));
+      }],
       ["GET", "/admin/settings/finance", SA, () => settingsOut()],
       ["PATCH", "/admin/settings/finance", SA, (c) => {
         const { data } = validateBody(S.settingsUpdate, c.body);

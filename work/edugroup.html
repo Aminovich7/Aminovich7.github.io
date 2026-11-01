@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduGroup — Mukhammad Batoshev</title>
+<meta name="description" content="An online learning platform with four roles, a self-promoting waitlist, instalment payments and background jobs that keep enrolments honest.">
+<meta name="author" content="Mukhammad Batoshev">
+<meta name="theme-color" content="#0b0a09">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://aminovich7.github.io/work/edugroup.html">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="EduGroup — Mukhammad Batoshev">
+<meta property="og:description" content="An online learning platform with four roles, a self-promoting waitlist, instalment payments and background jobs that keep enrolments honest.">
+<meta property="og:url" content="https://aminovich7.github.io/work/edugroup.html">
+<meta property="og:image" content="https://aminovich7.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css?v=1">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html#top" aria-label="Mukhammad Batoshev, home"><i class="dot" aria-hidden="true"></i><b>batoshev</b><span>/backend</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#before">Before software</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+    <a class="badge" href="../index.html#contact"><i class="dot" aria-hidden="true"></i>Available</a>
+  </div>
+</header>
+<main id="main" class="case">
+  <div class="wrap">
+    <a class="back" href="../index.html#work">← All work</a>
+    <div class="case__tags"><span>EduGroup</span><span class="status">Open source</span></div>
+    <h1>EduGroup</h1>
+    <p class="case__tagline">An online learning platform with four roles, a self-promoting waitlist, instalment payments and background jobs that keep enrolments honest.</p>
+    <dl class="case__meta"><div><dt>Role</dt><dd>Specification, review and tests</dd></div><div><dt>Timeline</dt><dd>Jul 2026</dd></div><div><dt>Status</dt><dd>Open source</dd></div><div><dt>Links</dt><dd><a href="https://github.com/Aminovich7/edugroup" target="_blank" rel="noopener">Code on GitHub ↗</a></dd></div></dl>
+    <div class="case__hero-shot"><img src="../img/edugroup/card.webp" alt="EduGroup superadmin panel: platform totals and income by group" width="1440" height="900"></div>
+    <div class="case__grid">
+      <div class="case__main">
+        <p>An online learning platform for a training centre. Teachers run courses and groups with video lessons; students enrol, pay in full or by instalments, and only then unlock the lessons; managers approve people and payments; a superadmin sees the whole platform.</p>
+        <div class="callout"><h2>How it was built</h2><p>I wrote the full specification (TZ.md, version 2.0, with a changelog of fixes) and built the project with Claude Code from it. I directed the build and reviewed the code and tests. The specification and the prompt are both in the repository.</p></div>
+        <h2>What it does</h2>
+        <ul class="points">
+          <li><strong>Waitlist with automatic promotion.</strong> When a group is full, students queue, and the next one moves up as soon as a seat frees.</li>
+          <li><strong>Instalment plans.</strong> A course can be paid in parts, each confirmed by a manager.</li>
+          <li><strong>Background jobs.</strong> Celery beat expires unpaid enrolments after 72 hours and flags overdue instalments every day.</li>
+          <li><strong>Refresh-token rotation with reuse detection.</strong> Replaying a revoked token signs the user out everywhere.</li>
+          <li><strong>Four dashboards</strong> for superadmin, manager, teacher and student, server-rendered with Jinja2 over the same services as the JSON API.</li>
+        </ul>
+      </div>
+      <aside class="case__side">
+        <h2>Stack</h2>
+        <ul class="chips"><li class="chip">FastAPI</li><li class="chip">async SQLAlchemy</li><li class="chip">PostgreSQL</li><li class="chip">Celery</li><li class="chip">Redis</li><li class="chip">Jinja2</li><li class="chip">Docker Compose</li></ul>
+        <h2>By the numbers</h2>
+        <ul class="numbers"><li><b>193</b><span>passing tests</span></li><li><b>4</b><span>roles</span></li><li><b>5</b><span>Docker Compose services</span></li></ul>
+        <h2>Links</h2>
+        <ul class="numbers"><li><a href="https://github.com/Aminovich7/edugroup" target="_blank" rel="noopener">Code and specification <span class="arrow" aria-hidden="true">↗</span></a></li></ul>
+      </aside>
+    </div>
+    <section class="gallery"><h2>Gallery</h2><div class="gallery__grid"><figure class="shot"><a href="../img/edugroup/catalogue.webp" target="_blank" rel="noopener"><img src="../img/edugroup/catalogue.webp" alt="Catalogue" loading="lazy"></a><figcaption><b>Catalogue.</b> Open groups with teacher, schedule, price and free seats.</figcaption></figure><figure class="shot"><a href="../img/edugroup/manager.webp" target="_blank" rel="noopener"><img src="../img/edugroup/manager.webp" alt="Manager" loading="lazy"></a><figcaption><b>Manager.</b> Approve new people and confirm or reject payments.</figcaption></figure><figure class="shot"><a href="../img/edugroup/student.webp" target="_blank" rel="noopener"><img src="../img/edugroup/student.webp" alt="Student" loading="lazy"></a><figcaption><b>Student.</b> Enrolments, payments and lesson progress.</figcaption></figure><figure class="shot"><a href="../img/edugroup/teacher.webp" target="_blank" rel="noopener"><img src="../img/edugroup/teacher.webp" alt="Teacher" loading="lazy"></a><figcaption><b>Teacher.</b> Courses, groups and lessons.</figcaption></figure></div></section>
+    <a class="next" href="suhulat.html"><span>Next project</span><strong>Suhulat →</strong></a>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span><strong>Mukhammad Batoshev</strong> · Backend Engineer · Tashkent, Uzbekistan</span>
+    <span>Screenshots use fictional demo data · © 2026</span>
+  </div>
+</footer>
+<script src="../assets/site.js?v=1"></script>
+</body>
+</html>

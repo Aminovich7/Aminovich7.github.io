@@ -840,3 +840,437 @@ tr.voided {
   background: var(--gray-100);
   color: var(--text);
 }
+
+
+/* ==========================================================================
+   Boshqaruv paneli (dashboard)
+
+   The page answers four questions in order: how much came in, how much the
+   clinic kept, where the rest went, and how it moved day by day. It mixes
+   headline tiles with three small charts; all of it is built in
+   static/js/dashboard.js from the same four API calls.
+
+   Chart colours. The tiles above keep their three-colour vocabulary (blue
+   rail, green/red for the sign of a result). Charts need more, because a
+   stack or a breakdown is unreadable without one colour per part, so the
+   colours below exist for charts and their legends only — never for a
+   figure's text, which stays near-black. Two fixed sets, validated together
+   for colour-blind separation and given a 2px white gap between parts:
+
+     departments  Ko'riklar blue · Operatsiyalar orange · Xonalar aqua
+                  (the same colour on every view of the page)
+     money flow   doctors violet · receipt costs pink · salaries rust ·
+                  other expenses amber · net remainder green
+
+   Green in the flow bar is the net remainder, which is the "positive
+   result" meaning green already has here. Every coloured part also has a
+   text label and figure beside it, so colour is never the only cue.
+   ========================================================================== */
+:root {
+  --viz-consult: #2a78d6;
+  --viz-surgery: #eb6834;
+  --viz-room:    #1baf7a;
+
+  --flow-doctor:  #6250d6;
+  --flow-receipt: #e87ba4;
+  --flow-salary:  #c2410c;
+  --flow-other:   #eda100;
+  --flow-net:     var(--success);
+}
+
+.viz-consult  { background: var(--viz-consult); fill: var(--viz-consult); }
+.viz-surgery  { background: var(--viz-surgery); fill: var(--viz-surgery); }
+.viz-room     { background: var(--viz-room);    fill: var(--viz-room); }
+.flow-doctor  { background: var(--flow-doctor); }
+.flow-receipt { background: var(--flow-receipt); }
+.flow-salary  { background: var(--flow-salary); }
+.flow-other   { background: var(--flow-other); }
+.flow-net     { background: var(--flow-net); }
+
+.swatch {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: var(--sp-2);
+  vertical-align: baseline;
+}
+
+/* A figure in a chart panel: near-black, tabular digits, small "so'm". */
+.money {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.money__unit {
+  margin-left: var(--sp-1);
+  font-size: 0.75em;
+  font-weight: var(--fw-medium);
+  opacity: .65;
+}
+.money.is-positive { color: var(--success-text); }
+.money.is-negative { color: var(--danger-text); }
+
+/* --- Filter bar ----------------------------------------------------------- */
+.dash-filter { padding: var(--sp-4) var(--sp-5); }
+
+.dash-filter__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-3) var(--sp-5);
+}
+
+.dash-filter__dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3);
+}
+
+.dash-filter__period { margin: var(--sp-3) 0 0; }
+
+/* Period presets as one segmented control. The preset that matches the
+   dates is filled in the primary blue, so the selected period is visible
+   without reading the date inputs. */
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  background: var(--gray-100);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.segmented__btn {
+  background: none;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  padding: var(--sp-2) var(--sp-4);
+  font-weight: var(--fw-medium);
+}
+
+.segmented__btn:hover {
+  background: var(--surface);
+  border-color: transparent;
+  color: var(--text);
+}
+
+.segmented__btn[aria-pressed="true"],
+.segmented__btn[aria-pressed="true"]:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: var(--fw-semibold);
+}
+
+/* --- KPI row -------------------------------------------------------------- */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.kpi-row:empty { display: none; }
+
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-4) var(--sp-5);
+  container-type: inline-size;
+}
+
+.kpi__label {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-muted);
+}
+
+.kpi__value {
+  display: block;
+  font-size: var(--fs-stat-value);
+  font-size: clamp(1.125rem, 12cqi, var(--fs-stat-value));
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.kpi__sub {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+/* Klinika ulushi: the figure the page exists to answer gets the blue rail. */
+.kpi--accent { border-left: 4px solid var(--primary); }
+
+.kpi--result.is-positive {
+  background: var(--success-light);
+  border-color: #bbf7d0;
+  border-left: 4px solid var(--success);
+}
+.kpi--result.is-positive .kpi__value,
+.kpi--result.is-positive .kpi__label { color: var(--success-text); }
+
+.kpi--result.is-negative {
+  background: var(--danger-light);
+  border-color: #fecaca;
+  border-left: 4px solid var(--danger);
+}
+.kpi--result.is-negative .kpi__value,
+.kpi--result.is-negative .kpi__label { color: var(--danger-text); }
+
+/* --- Panels --------------------------------------------------------------- */
+.dash-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--sp-4);
+}
+
+.dash-grid > .card { margin-bottom: var(--sp-4); }
+
+.panel__head { margin-bottom: var(--sp-4); }
+
+.panel__head--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.panel__title {
+  margin: 0;
+  font-size: var(--fs-md);
+  color: var(--text);
+}
+
+.panel__hint {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+/* --- Money-flow bar ------------------------------------------------------- */
+.flow-bar {
+  display: flex;
+  gap: 2px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface);
+  margin-bottom: var(--sp-4);
+}
+
+.flow-bar__seg {
+  flex: 1 1 0;
+  min-width: 3px;
+}
+
+.flow-bar__empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-100);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.legend-list__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto 3.5em;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) 0;
+  border-top: 1px solid var(--gray-100);
+  font-size: var(--fs-sm);
+}
+
+.legend-list__item:first-child { border-top: none; }
+.legend-list__item .swatch { margin-right: 0; }
+.legend-list__label { color: var(--gray-700); }
+.legend-list__value { font-weight: var(--fw-semibold); text-align: right; }
+.legend-list__pct { color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+.flow-note {
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background: var(--danger-light);
+  color: var(--danger-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+/* --- Statement ------------------------------------------------------------ */
+.statement { margin: 0; }
+
+.statement__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  font-size: var(--fs-sm);
+}
+
+.statement__label { color: var(--gray-700); }
+.statement__value { margin: 0; text-align: right; }
+
+.statement__row--start .statement__label,
+.statement__row--start .statement__value { font-weight: var(--fw-semibold); color: var(--text); }
+
+.statement__row--subtotal {
+  border-top: 1px solid var(--border);
+  font-weight: var(--fw-semibold);
+}
+.statement__row--subtotal .statement__label { color: var(--text); }
+
+.statement__row--total {
+  margin-top: var(--sp-2);
+  padding-top: var(--sp-3);
+  border-top: 2px solid var(--gray-800);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+}
+.statement__row--total .statement__label { color: var(--text); }
+
+/* --- Trend chart ---------------------------------------------------------- */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  color: var(--gray-700);
+}
+
+.chart-legend__item { display: inline-flex; align-items: center; }
+
+.trend { position: relative; }
+.trend__svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.trend__grid { stroke: var(--gray-100); stroke-width: 1; }
+.trend__baseline { stroke: var(--gray-300); stroke-width: 1; }
+.trend__axis { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.trend__peak { fill: var(--text); font-size: 11px; font-weight: var(--fw-semibold); }
+
+.trend__seg { transition: opacity .12s; }
+.trend__col.is-dim .trend__seg { opacity: .35; }
+
+.trend__hit { fill: transparent; cursor: pointer; outline: none; }
+.trend__hit:focus-visible { fill: rgba(37, 99, 235, .08); }
+
+.trend__tooltip {
+  position: absolute;
+  z-index: 2;
+  min-width: 200px;
+  padding: var(--sp-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  font-size: var(--fs-sm);
+  pointer-events: none;
+}
+
+.trend__tip-title { margin: 0 0 var(--sp-2); font-weight: var(--fw-semibold); }
+.trend__tip-list { margin: 0; }
+
+.trend__tip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: 2px 0;
+}
+
+.trend__tip-row dt { display: inline-flex; align-items: center; color: var(--gray-700); }
+.trend__tip-row dd { margin: 0; font-variant-numeric: tabular-nums; }
+.trend__tip-row--total {
+  margin-top: var(--sp-1);
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--border);
+  font-weight: var(--fw-semibold);
+}
+
+.trend__empty { margin: 0; padding: var(--sp-6) 0; text-align: center; }
+
+/* --- Departments ---------------------------------------------------------- */
+.dept-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-5);
+}
+
+.dept__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+.dept__name {
+  display: inline-flex;
+  align-items: center;
+  font-weight: var(--fw-semibold);
+  margin-right: auto;
+}
+
+.dept__income { font-size: var(--fs-md); font-weight: var(--fw-bold); }
+.dept__share { color: var(--text-muted); font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+
+.dept__track {
+  height: 8px;
+  background: var(--gray-100);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--sp-3);
+}
+
+.dept__fill { display: block; height: 100%; border-radius: 4px; }
+
+.dept__facts { margin: 0; font-size: var(--fs-sm); }
+
+.dept__fact {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-1) 0;
+  border-top: 1px solid var(--gray-100);
+}
+
+.dept__fact dt { color: var(--text-muted); }
+.dept__fact dd { margin: 0; font-weight: var(--fw-medium); font-variant-numeric: tabular-nums; }
+.dept__fact dd.is-positive { color: var(--success-text); }
+.dept__fact dd.is-negative { color: var(--danger-text); }
+
+@media (max-width: 1100px) {
+  .kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dash-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .dept-list { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 520px) {
+  .kpi-row { grid-template-columns: minmax(0, 1fr); }
+  .segmented { width: 100%; }
+  .segmented__btn { flex: 1 1 auto; padding: var(--sp-2) var(--sp-3); }
+  .dash-filter__dates { width: 100%; }
+  .dash-filter__dates .field { flex: 1 1 140px; }
+}

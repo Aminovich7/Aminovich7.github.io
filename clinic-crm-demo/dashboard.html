@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard — Clinic CRM</title>
-  <link rel="stylesheet" href="static/css/style.css?v=1">
+  <link rel="stylesheet" href="static/css/style.css?v=2">
   <link rel="icon" href="static/demo/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/demo/demo.css?v=1">
+  <link rel="stylesheet" href="static/demo/demo.css?v=2">
 </head>
 <body class="app-shell">
   <aside class="sidebar" id="sidebar">
@@ -24,49 +24,89 @@
       </div>
     </header>
     <main class="container">
-      
+
 <h1>Dashboard</h1>
 
-<div class="card">
-  <form class="inline-form" id="range-form">
-    <div class="field">
-      <label for="date_from">From</label>
-      <input type="date" id="date_from">
+<div class="card dash-filter">
+  <form class="dash-filter__form" id="range-form">
+    <div class="segmented" role="group" aria-label="Period">
+      <button type="button" class="segmented__btn" id="current-month-btn">This month</button>
+      <button type="button" class="segmented__btn" id="previous-month-btn">Last month</button>
+      <button type="button" class="segmented__btn" id="last-week-btn">Last week</button>
+      <button type="button" class="segmented__btn" id="filter-clear-btn">All time</button>
     </div>
-    <div class="field">
-      <label for="date_to">To</label>
-      <input type="date" id="date_to">
+    <div class="dash-filter__dates">
+      <div class="field">
+        <label for="date_from">From</label>
+        <input type="date" id="date_from">
+      </div>
+      <div class="field">
+        <label for="date_to">To</label>
+        <input type="date" id="date_to">
+      </div>
+      <button type="submit">Refresh</button>
     </div>
-    <button type="submit">Refresh</button>
-    <button type="button" class="secondary" id="current-month-btn">This month</button>
-    <button type="button" class="secondary" id="previous-month-btn">Last month</button>
-    <button type="button" class="secondary" id="last-week-btn">Last week</button>
-    <button type="button" class="secondary" id="filter-clear-btn">Clear</button>
   </form>
-  <p class="muted" id="period-label"></p>
+  <p class="muted dash-filter__period" id="period-label"></p>
 </div>
 
 <div id="error-container"></div>
 
-<div class="grid" id="hero-card"></div>
-<div class="grid" id="summary-cards"></div>
+<!-- The four figures the owner asks about first. -->
+<section class="kpi-row" id="kpi-row" aria-label="Key figures"></section>
 
-<h2>By department</h2>
-<div class="grid" id="section-cards"></div>
+<div class="dash-grid">
+  <section class="card panel" aria-labelledby="flow-title">
+    <header class="panel__head">
+      <h2 class="panel__title" id="flow-title">Where the income went</h2>
+      <p class="panel__hint">Every so'm of total income</p>
+    </header>
+    <div class="flow-bar" id="flow-bar" role="img"></div>
+    <ul class="legend-list" id="flow-legend"></ul>
+    <p class="flow-note hidden" id="flow-note"></p>
+  </section>
 
-<h2>Payroll and expenses</h2>
-<div class="grid grid--quad" id="payroll-expense-cards"></div>
+  <section class="card panel" aria-labelledby="statement-title">
+    <header class="panel__head">
+      <h2 class="panel__title" id="statement-title">Statement</h2>
+      <p class="panel__hint">From income to net remainder</p>
+    </header>
+    <dl class="statement" id="statement"></dl>
+  </section>
+</div>
+
+<section class="card panel" aria-labelledby="trend-title">
+  <header class="panel__head panel__head--row">
+    <div>
+      <h2 class="panel__title" id="trend-title">Daily income</h2>
+      <p class="panel__hint" id="trend-hint">By department; point at a bar for details</p>
+    </div>
+    <ul class="chart-legend" id="trend-legend"></ul>
+  </header>
+  <div class="trend" id="trend">
+    <div class="trend__tooltip hidden" id="trend-tooltip" role="status"></div>
+  </div>
+  <p class="muted trend__empty hidden" id="trend-empty">No receipts in this period.</p>
+</section>
+
+<section class="card panel" aria-labelledby="dept-title">
+  <header class="panel__head">
+    <h2 class="panel__title" id="dept-title">By department</h2>
+    <p class="panel__hint">Income, doctor share and clinic share</p>
+  </header>
+  <div class="dept-list" id="dept-list"></div>
+</section>
 
     </main>
   </div>
 
-  <script src="static/demo/crm-mock.js?v=1"></script>
-  <script src="static/demo/demo.js?v=1"></script>
-  <script src="static/js/api.js?v=1"></script>
-  <script src="static/js/auth.js?v=1"></script>
-  <script src="static/js/nav.js?v=1"></script>
+  <script src="static/demo/crm-mock.js?v=2"></script>
+  <script src="static/demo/demo.js?v=2"></script>
+  <script src="static/js/api.js?v=2"></script>
+  <script src="static/js/auth.js?v=2"></script>
+  <script src="static/js/nav.js?v=2"></script>
   
-<script src="static/js/dashboard.js?v=1"></script>
+<script src="static/js/dashboard.js?v=2"></script>
 
 </body>
 </html>

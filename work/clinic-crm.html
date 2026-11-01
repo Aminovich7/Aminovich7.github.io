@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clinic CRM — Mukhammad Batoshev</title>
+<meta name="description" content="A finance and payroll system for a private clinic: receipts, doctors' commissions, salaries, the pharmacy account and expenses, with a dashboard that shows where every so'm went.">
+<meta name="author" content="Mukhammad Batoshev">
+<meta name="theme-color" content="#0b0a09">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://aminovich7.github.io/work/clinic-crm.html">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Clinic CRM — Mukhammad Batoshev">
+<meta property="og:description" content="A finance and payroll system for a private clinic: receipts, doctors' commissions, salaries, the pharmacy account and expenses, with a dashboard that shows where every so'm went.">
+<meta property="og:url" content="https://aminovich7.github.io/work/clinic-crm.html">
+<meta property="og:image" content="https://aminovich7.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css?v=1">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html#top" aria-label="Mukhammad Batoshev, home"><i class="dot" aria-hidden="true"></i><b>batoshev</b><span>/backend</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#before">Before software</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+    <a class="badge" href="../index.html#contact"><i class="dot" aria-hidden="true"></i>Available</a>
+  </div>
+</header>
+<main id="main" class="case">
+  <div class="wrap">
+    <a class="back" href="../index.html#work">← All work</a>
+    <div class="case__tags"><span>Clinic CRM</span><span class="status">Deployed</span></div>
+    <h1>Clinic CRM</h1>
+    <p class="case__tagline">A finance and payroll system for a private clinic: receipts, doctors' commissions, salaries, the pharmacy account and expenses, with a dashboard that shows where every so'm went.</p>
+    <dl class="case__meta"><div><dt>Role</dt><dd>Sole developer</dd></div><div><dt>Timeline</dt><dd>Aug 2026 – Nov 2026</dd></div><div><dt>Status</dt><dd>Deployed, launching at the clinic soon</dd></div><div><dt>Links</dt><dd><a href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Live demo ↗</a><br><a href="https://github.com/Aminovich7/clinic-crm-showcase" target="_blank" rel="noopener">Case study on GitHub ↗</a></dd></div></dl>
+    <div class="case__hero-shot"><img src="../img/clinic/dashboard.webp" alt="Clinic CRM dashboard" width="1440" height="900"></div>
+    <div class="case__grid">
+      <div class="case__main">
+        <h2>The problem</h2>
+        <p>Every visit, surgery and room stay at the clinic produced a paper receipt. At the end of the month someone worked out in Excel what each doctor had earned from a different percentage of every receipt, what each nurse was owed on a prorated salary, what had already been paid as advances, and where the pharmacy account stood. It was slow, easy to get wrong, and nobody could see the clinic's real position until the month was over.</p>
+        <h2>What I built</h2>
+        <ul class="points">
+          <li><strong>Receipts</strong> for consultations, surgeries and room stays, with the doctor's and the clinic's share calculated live while typing.</li>
+          <li><strong>A dashboard</strong> that splits total income into doctors' shares, receipt costs, salaries, other expenses and the net remainder, with a statement from income to net, a daily income chart by department, and a breakdown per department.</li>
+          <li><strong>Reports</strong> by department and by doctor for any date range, exportable to Excel.</li>
+          <li><strong>Payroll</strong>: earned, paid and remaining for every staff member, with advances, full payments and overtime shifts.</li>
+          <li><strong>The pharmacy ledger and expenses</strong>, searchable and totalled for any period.</li>
+          <li><strong>Staff and access</strong>: three roles, and voided records that only the superadmin can restore or delete.</li>
+        </ul>
+        <h2>Engineering decisions</h2>
+        <div class="decisions">
+          <div class="decision"><h3>Money that adds up</h3><p>Whole so'm stored as Numeric(12,0) and calculated with Decimal. Each receipt is rounded half-up before totals are summed, so a report always equals the sum of its receipts. The browser preview uses exact BigInt arithmetic.</p></div>
+          <div class="decision"><h3>One source for every number</h3><p>The dashboard's daily chart is built from the same per-receipt functions as the totals, and a test checks that the chart's days add up exactly to the dashboard figures.</p></div>
+          <div class="decision"><h3>Dates in the clinic's time zone</h3><p>Reports filter from local midnight to local midnight. I found and fixed a bug where the browser turned "the 1st of the month" into UTC and pulled the previous day into every monthly report.</p></div>
+          <div class="decision"><h3>Fixed an N+1 query</h3><p>The payroll balance ran five queries per staff member. It now runs five in total, and a test proves the batched and per-person versions return identical figures.</p></div>
+          <div class="decision"><h3>Access and security</h3><p>Roles enforced on the server. JWT access and refresh tokens with a Redis blocklist, sessions revoked on password change or block, Argon2, rate-limited login and a strict Content-Security-Policy.</p></div>
+          <div class="decision"><h3>Tested and deployed</h3><p>166 tests against real PostgreSQL and Redis, 69 of them over HTTP. Docker on Render, PostgreSQL on Neon, and daily backups checked with pg_restore.</p></div>
+        </div>
+        <div class="callout callout--note"><p>The source code is private because the system was built for a real clinic, and the clinic stays anonymous. The live demo runs the real interface in your browser on fictional data, in English or the original Uzbek. I'm happy to walk through the code, the data model and the tests in an interview.</p></div>
+      </div>
+      <aside class="case__side">
+        <h2>Stack</h2>
+        <ul class="chips"><li class="chip">FastAPI</li><li class="chip">SQLAlchemy 2.0 async</li><li class="chip">PostgreSQL</li><li class="chip">Alembic</li><li class="chip">Redis</li><li class="chip">Pydantic v2</li><li class="chip">Jinja2</li><li class="chip">Docker</li></ul>
+        <h2>By the numbers</h2>
+        <ul class="numbers"><li><b>86</b><span>API endpoints</span></li><li><b>166</b><span>automated tests</span></li><li><b>10</b><span>database tables</span></li><li><b>10</b><span>Alembic migrations</span></li><li><b>3</b><span>user roles</span></li></ul>
+        <h2>Try it</h2>
+        <ul class="numbers"><li><a href="https://aminovich7.github.io/clinic-crm-demo/" target="_blank" rel="noopener">Live demo, sign in as any role <span class="arrow" aria-hidden="true">↗</span></a></li><li><a href="https://github.com/Aminovich7/clinic-crm-showcase" target="_blank" rel="noopener">Architecture and screenshots <span class="arrow" aria-hidden="true">↗</span></a></li></ul>
+      </aside>
+    </div>
+    <section class="gallery"><h2>Gallery</h2><div class="gallery__grid"><figure class="shot shot--wide"><a href="../img/clinic/dashboard-full.webp" target="_blank" rel="noopener"><img src="../img/clinic/dashboard-full.webp" alt="Dashboard" loading="lazy"></a><figcaption><b>Dashboard.</b> Every so'm of income, from doctors' shares to the net remainder, then the daily chart and each department.</figcaption></figure><figure class="shot shot--wide"><a href="../img/clinic/dashboard-trend.webp" target="_blank" rel="noopener"><img src="../img/clinic/dashboard-trend.webp" alt="Daily income" loading="lazy"></a><figcaption><b>Daily income.</b> Stacked by department, with the breakdown for any day on hover.</figcaption></figure><figure class="shot"><a href="../img/clinic/receipts.webp" target="_blank" rel="noopener"><img src="../img/clinic/receipts.webp" alt="Receipts" loading="lazy"></a><figcaption><b>Receipts.</b> Entry with a live calculation above a filterable list.</figcaption></figure><figure class="shot"><a href="../img/clinic/reports-by-doctor.webp" target="_blank" rel="noopener"><img src="../img/clinic/reports-by-doctor.webp" alt="Report by doctor" loading="lazy"></a><figcaption><b>Report by doctor.</b> One doctor's share across consultations, surgeries and rooms.</figcaption></figure><figure class="shot"><a href="../img/clinic/salaries.webp" target="_blank" rel="noopener"><img src="../img/clinic/salaries.webp" alt="Payroll" loading="lazy"></a><figcaption><b>Payroll.</b> Earned, paid and remaining for each person.</figcaption></figure><figure class="shot"><a href="../img/clinic/pharmacy.webp" target="_blank" rel="noopener"><img src="../img/clinic/pharmacy.webp" alt="Pharmacy" loading="lazy"></a><figcaption><b>Pharmacy.</b> Medicine received against payments, as a running balance.</figcaption></figure></div></section>
+    <a class="next" href="edugroup.html"><span>Next project</span><strong>EduGroup →</strong></a>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span><strong>Mukhammad Batoshev</strong> · Backend Engineer · Tashkent, Uzbekistan</span>
+    <span>Screenshots use fictional demo data · © 2026</span>
+  </div>
+</footer>
+<script src="../assets/site.js?v=1"></script>
+</body>
+</html>
