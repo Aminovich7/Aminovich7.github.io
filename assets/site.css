@@ -518,3 +518,10 @@ button.chip:hover { color: var(--ink); border-color: var(--muted); }
 .project__more:hover { color: var(--accent); }
 .btn--sm { padding: .55rem 1rem; font-size: .875rem; }
 .hero__lead { max-width: 40rem; }
+
+/* Contact: one column; the email address and profile links sit in a quiet line under the buttons. */
+.contact { display: block; max-width: 44rem; }
+.contact__more { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.6rem; margin: 1.6rem 0 0; font-size: .9375rem; color: var(--muted); }
+.contact__more a { color: var(--ink); text-decoration: none; }
+.contact__more a:hover { color: var(--accent); }
+.contact__email { display: inline-flex; align-items: center; color: var(--ink); }
